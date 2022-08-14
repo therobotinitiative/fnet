@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>FNet Login</title>
+		<link rel="stylesheet"  href="/login.css">
+		<script src="/login.js"></script>
+		<script type="text/javascript">
+			function toggle() {
+				var pwd = document.getElementById('password');
+				if (pwd.type == 'text') {
+					pwd.type = 'password';
+				} else {
+					pwd.type = 'text';
+				}
+			}
+		</script>
+		<style type="text/stylesheet">
+			.error {
+				bavkground: red;
+				border: 2px solid;
+				border-radius: 4px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="center_dialog">
+		<label class="title">FNet login</label>
+		<div id="reason" class="error" th:text="${reason}">
+			You should not see this
+		</div>
+		<form action="/login" method="POST">
+			<input type="hidden" name="type" value="1" />
+			<input type="hidden" name="_token" th:value="${token}" />
+			<label>User name:</label><br>
+			<input type="text" name="username" required/><br>
+			<label>Password:</label><br>
+			<!-- remember required attribute -->
+			<input type="password" name="password" id="password">
+			<img src="/login-spwd.png" id="toggle-icon" onclick="toggle()" class="password-toggle">
+			<br>
+			<button type="submit">Login</button>
+		</form>
+		</div>
+	</body>
+</html>

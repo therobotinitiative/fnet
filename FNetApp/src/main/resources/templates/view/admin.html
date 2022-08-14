@@ -1,0 +1,99 @@
+<script type="text/javascript">
+</script>
+
+<section ng-controller="adminController" class="admin">
+	<h1>admin page</h1>
+	<ul class="admin-menu">
+		<li th:each="element : ${menu}"><a href="" th:href="${element.key}" th:text="${element.value}">link</a></li>
+	</ul>
+	<!--  ==== USER VIEW ==== -->
+	<div class="admin-user-view" ng-show="view.active == 'user'">
+		<!-- === USERS LIST === -->
+		<h2>Users</h2>
+		<ul class="admin-user-list">
+			<li ng-repeat="user in AdminContainer.all_data.users" ng-click="AdminContainer.user.select(user)" ng-class="AdminContainer.user.current == user ? 'active-user' : 'not-active-user'">
+				<span>
+					{{user.userName}}
+				</span>
+				<span class="pull_right">
+						<button ng-click="AdminContainer.user.delete(user)">
+							Delete
+						</button>
+				</span>
+			</li>
+		</ul>
+		<!-- === CREATE USER === -->
+		<section class="admin-createuser-section">
+			Username: <input id="username">
+			<select id="group">
+				<option ng-repeat="group in AdminContainer.all_data.groups" value="{{group.groupId}}">
+					{{group.name}}
+				</option>
+			</select>
+			<br>
+			<button ng-click="AdminContainer.user.add()">Add User</button>
+		</section>
+		<!-- === USER === -->
+		<section class="admin-user-section">
+			<section ng-show="AdminContainer.user.current != null">
+				<h2>Currently selected user:</h2>
+				User name: {{AdminContainer.user.current.userName}}<br>
+				User id: {{AdminContainer.user.current.userId}}<br>
+				Password: <input type="text" id="password"> <button ng-click="AdminContainer.user.password()">Set password</button>
+			</section>
+			<!-- === USER DATA === -->
+			<section ng-show="AdminContainer.user.data != null">
+					<h2 ng-click="AdminContainer.sections.toggle_userdata()">User data</h2>
+					<span ng-show="AdminContainer.sections.userdata == true">
+						First name: <input type="text" id="first-name" ng-model="AdminContainer.user.data.firstName"><br>
+						Last name: <input type="text" id="last-name" ng-model="AdminContainer.user.data.lastName"><br>
+						Email: <input type="email" id="email" ng-model="AdminContainer.user.data.email"><br>
+					</span>
+					<br>
+					<button ng-click="AdminContainer.user.update()">Update</button>
+			</section>
+			<!--  === PERMISSIONS === -->
+			<section ng-show="AdminContainer.user.current != null">
+				<h2 ng-click="AdminContainer.sections.toggle_userpermissions()">Permissions</h2>
+				<span ng-show="AdminContainer.sections.userpermissions == true">
+					<span ng-repeat="permission in AdminContainer.all_data.permissions">
+						<input type="checkbox" id="{{permission}}" value="{{permission}}" checklist-model="AdminContainer.user.permissions" checklist-value="permission">
+						<label class="admin-permission-label">{{permission}}</label>
+					</span>
+					<!-- === CUSTOM PERMISSIONS === -->
+					<h3>Custom Permissions:</h3>
+					<ul class="admin-custom-permissions-list">
+						<li ng-repeat="permission in AdminContainer.user.custom_permissions">{{permission}} <button ng-click="AdminContainer.user.delete_permission(permission)">Delete</button></li>
+					</ul>
+					<span class="admin-add-custom-permission">
+						<input type="text" id="custom_permission"><button ng-click="AdminContainer.user.add_permission()">Add</button>
+					</span>
+					<br>
+					<button ng-click="AdminContainer.user.update_permissions()">Update Permissions</button>
+				</span>
+			</section>
+			<!--  === GROUPS === -->
+			<section ng-show="AdminContainer.user.current != null">
+				<h2 ng-click="AdminContainer.sections.toggle_usergroups()">Groups</h2>
+				<span ng-show="AdminContainer.sections.usergroups == true">
+					<ul class="admin-group-list">
+						<li ng-repeat="group in AdminContainer.all_data.groups">
+							<input type="checkbox" id="{{group.name}}" value="{{group.groupId}}" checklist-model="AdminContainer.user.groups" checklist-value="group.groupId">
+							{{group.name}}
+						</li>
+					</ul>
+					<button ng-click="AdminContainer.user.update_groups()">Update Groups</button>
+				</span>
+			</section>
+		</section>
+	</div>
+	<!-- ==== GROUP VIEW ==== -->
+	<div class="adminn-group-view" ng-show="view.active == 'group'">
+		<h1>Groups</h1>
+		<ul class="admin-group-list">
+			<li ng-repeat="group in AdminContainer.all_data.groups">
+				{{group.name}}
+			</li>
+		</ul>
+	</div>
+</section>

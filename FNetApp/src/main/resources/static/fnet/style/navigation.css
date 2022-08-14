@@ -1,0 +1,19 @@
+ul.navigation-bar {
+	list-disc-type: none;
+	padding-left: 0px;
+	text: var(--color-text);
+}
+
+li.navigation-item {
+	display: inline;
+	border: 1px solid black;
+	width: 25%;
+}
+
+li.navigation-item:last {
+	display: inline;
+	border: 1px solid black;
+	width: 25%;
+	text-align: right;
+	vertical-align: right;
+}

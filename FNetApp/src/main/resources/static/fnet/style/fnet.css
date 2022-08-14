@@ -1,0 +1,26 @@
+@import "colors.css";
+@import "common.css";
+@import "navigation.css";
+@import "admin.css";
+
+body {
+	background: var(--color-main);
+	color: var(--color-text);
+	font-size: var(--size-text);
+	font-family: var(--fnet-font-family);
+}
+
+a, a:visited, a:hover {
+	color: var(--color-text);
+	text-decoration: none;
+}
+
+div.fnet-main {
+	margin: 0 auto 0 auto;
+	width: 1000px;
+}
+
+footer {
+	background-color: var(--color-darker)
+	padding: 4px;
+}

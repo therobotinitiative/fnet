@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>FNet 2.0</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+		<script src="/fnet/js/angular-route.js"></script>
+		<script src="/fnet/js/checklist-model.js"></script>
+		<script src="/fnet/js/fnet.js"></script>
+		<script src="/fnet/js/admin.js"></script>
+		<script th:inline="javascript">
+			var group_id = /*[[${activegroup}]]*/null;
+			var session = {
+				user: /*[[${user}]]*/null,
+				group: null,
+				current_view: null,
+				username: /*[[${username}]]*/null,
+			};
+		</script>
+		
+		<link rel="stylesheet" href="/fnet/style/fnet.css">
+	</head>
+	<body>
+		<div ng-controller="fc" class="fnet-main" ng-app="fnet">
+			<img src="/fnet/images/logo.png">
+			<nav>
+				<ul class="navigation-bar">
+					<li class="navigation-item">
+						<span class="name" th:text="${username}">name</span>
+						<span th:if="${isadmin == true}">
+							<a href="/fnet#!/admin">admin</a>
+						</span>
+					</li>
+					<li class="navigation-item">
+						<!-- Grups -->
+						&nbsp;
+					</li>
+					<li class="navigation-item">
+						<!-- Latest -->
+						Files: (10) Comments:(20)
+					</li>
+					<li class="navigation-item pull-right">
+						<a href="/logout">Logout</a>
+					</li>
+				</ul>
+			</nav>
+			<div id="main" ng-view></div>
+			<footer>
+				<span class="pull-left">
+					&copy; 2022 Orbital3d Studios
+				</span>
+				<span class="pull-right" th:text="${fnetversion}">
+					No Attribute
+				</span>
+			</footer>
+		</div>
+	</body>
+</html>
