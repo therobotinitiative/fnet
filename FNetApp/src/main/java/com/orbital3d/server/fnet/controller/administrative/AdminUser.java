@@ -1,9 +1,11 @@
 package com.orbital3d.server.fnet.controller.administrative;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -11,7 +13,6 @@ import java.util.Set;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,17 +25,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.orbital3d.server.fnet.database.entity.Group;
 import com.orbital3d.server.fnet.database.entity.User;
 import com.orbital3d.server.fnet.database.entity.UserData;
-import com.orbital3d.server.fnet.database.entity.UserGroupMapping;
-import com.orbital3d.server.fnet.database.repository.UserGroupMappingRepository;
 import com.orbital3d.server.fnet.security.FnetPermissions;
+import com.orbital3d.server.fnet.service.GroupService;
+import com.orbital3d.server.fnet.service.MappingService;
 import com.orbital3d.server.fnet.service.PasswordService;
 import com.orbital3d.server.fnet.service.UserDataService;
 import com.orbital3d.server.fnet.service.UserService;
 import com.orbital3d.web.security.weblectricfence.annotation.RequiresPermission;
 import com.orbital3d.web.security.weblectricfence.util.HashUtil;
 
+/**
+ * Administrative controller for {@link User} related operations.
+ * 
+ * @author msiren
+ *
+ */
 @RestController
 @RequestMapping("/fnet/admin/user")
 @ResponseBody
@@ -46,12 +54,21 @@ public class AdminUser {
 	private UserDataService userDataService;
 
 	@Autowired
-	private UserGroupMappingRepository userGroupMappingRepository;
+	private MappingService mappingService;
 
 	@Autowired
 	private PasswordService passwordService;
 
-	// Variables accessed by framework
+	@Autowired
+	private GroupService groupService;
+
+	/**
+	 * User information DTO.
+	 * 
+	 * @author msiren
+	 *
+	 */
+	// Getters used by framework.
 	@SuppressWarnings("unused")
 	private static final class UserDTO {
 		private String userName;
@@ -78,12 +95,18 @@ public class AdminUser {
 			this.userId = userId;
 		}
 
-		public static UserDTO of(String userName, Long userId) {
+		static UserDTO of(String userName, Long userId) {
 			return new UserDTO(userName, userId);
 		}
 	}
 
-	// Variabes accessed by framework
+	/**
+	 * DTO for creating new {@link User}.
+	 * 
+	 * @author msiren
+	 *
+	 */
+	// Gettters used by framework.
 	@SuppressWarnings("unused")
 	private static final class CreateUserDTO {
 		private String username;
@@ -108,7 +131,6 @@ public class AdminUser {
 		private void setGroupId(Long groupId) {
 			this.groupId = groupId;
 		}
-
 	}
 
 	/**
@@ -138,28 +160,37 @@ public class AdminUser {
 		// Create user
 		user = userService.save(user);
 		// Map to group
-		userGroupMappingRepository.save(UserGroupMapping.of(user.getUserId(), userDto.groupId));
+		mappingService.addUser(user, groupService.getById(userDto.getGroupId()).get());
 		// Create user data
-		UserData ud = UserData.of(user.getUserId(), "", "", "", null, "", userDto.getGroupId(), new Date(), null);
-		userDataService.save(ud);
+		UserData userData = UserData.of(user.getUserId(), "", "", "", null, "", userDto.getGroupId(), new Date(), null);
+		userDataService.save(userData);
 		return UserDTO.of(userDto.getUsername(), user.getUserId());
 	}
 
+	/**
+	 * Sets the {@link User} password. If the password is "generate" a new password
+	 * will be generated.
+	 * 
+	 * @param userId   User id
+	 * @param password New password
+	 * @return Newly set password
+	 * @throws NoSuchAlgorithmException
+	 */
 	@PutMapping(value = "/password/{userid}/{password}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
 	@RequiresPermission(FnetPermissions.Administrator.User.PASSWORD)
 	protected Map<String, String> changePassword(@PathVariable(name = "userid") Long userId,
 			@PathVariable(name = "password", required = false) String password) throws NoSuchAlgorithmException {
-		if (StringUtils.isEmpty(password)) {
+		if (password.equalsIgnoreCase("generate")) {
 			password = RandomStringUtils.randomAlphanumeric(8);
 		}
-		Optional<User> u = userService.findById(userId);
-		if (u.isPresent()) {
+		Optional<User> user = userService.getById(userId);
+		if (user.isPresent()) {
 			byte[] salt = HashUtil.generateToken();
 			byte[] hashed = passwordService.hashPassword(password, salt);
-			u.get().setPassword(hashed);
-			u.get().setSalt(salt);
-			userService.save(u.get());
+			user.get().setPassword(hashed);
+			user.get().setSalt(salt);
+			userService.save(user.get());
 		}
 		Map<String, String> savedPassword = new HashMap<>();
 		savedPassword.put("password", password);
@@ -173,7 +204,7 @@ public class AdminUser {
 	@Transactional
 	@RequiresPermission(FnetPermissions.Administrator.User.DELETE)
 	protected void deleteUser(@PathVariable Long userId) {
-		userService.delete(User.of(userId, null, null, null));
+		userService.delete(User.of(userId));
 	}
 
 	/**
@@ -184,7 +215,7 @@ public class AdminUser {
 	@RequiresPermission(FnetPermissions.Administrator.User.GROUPS)
 	protected Set<Long> getUserGroups(@PathVariable Long userId) {
 		Set<Long> groups = new HashSet<>();
-		userGroupMappingRepository.findByUserId(userId).forEach(userGroupMapping -> {
+		mappingService.findByUser(userService.getById(userId).get()).forEach(userGroupMapping -> {
 			groups.add(userGroupMapping.getGroupId());
 		});
 		return groups;
@@ -198,11 +229,9 @@ public class AdminUser {
 	@Transactional
 	@RequiresPermission(FnetPermissions.Administrator.User.UPDATE_GROUPS)
 	protected void updateUserGroups(@PathVariable Long userId, @RequestBody Set<Long> groups) {
-		userGroupMappingRepository.deleteByUserId(userId);
-		Set<UserGroupMapping> userGrouoMappings = new HashSet<>();
-		groups.forEach(groupOd -> {
-			userGrouoMappings.add(UserGroupMapping.of(userId, groupOd));
-		});
-		userGroupMappingRepository.saveAll(userGrouoMappings);
+		mappingService.deleteByUser(userService.getById(userId).get());
+		List<Group> newGroups = new ArrayList<>();
+		groups.forEach(groupId -> newGroups.add(Group.of(groupId, null)));
+		mappingService.addUser(userService.getById(userId).get(), newGroups);
 	}
 }

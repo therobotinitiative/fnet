@@ -29,7 +29,6 @@ public class FNetAuthenticator implements Authenticator {
 		UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
 		Optional<User> user = userService.findUserByName(usernamePasswordToken.getUsername());
 		if (user.isPresent()) {
-//			byte[] password = ArrayUtils.addAll(usernamePasswordToken.getPassword().getBytes(), user.get().getSalt());
 			if (passwordService.verifyPassword(user.get(), usernamePasswordToken.getPassword())) {
 				return user.get();
 			}

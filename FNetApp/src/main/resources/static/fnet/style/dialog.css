@@ -1,0 +1,34 @@
+form.dialog {
+	padding: var(--large-padding);
+	background-color: var(--color-main);
+	border-width: var(--border-width);
+	border-style: var(--border-style);
+	border-color: var(--border-color);
+	border-radius: var(--border-radius);
+}
+
+div.dialog-box {
+	background-color: #263E35;
+	border-radius: var(--border-radius);
+	padding: var(--small-padding);
+}
+
+.center-dialog {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.middle-align {
+	vertical-align: middle;
+}
+
+div.modal-background {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	background-color: rgba(0,0,0,0.6);
+}

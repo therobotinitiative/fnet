@@ -1,11 +1,14 @@
 datasource:
-    url: jdbc:mariadb://data.base:6033/fnetdev?useSSL=false
-    user: fnetdev
-    password: fnetdev
+  url: jdbc:mariadb://data.base:6033/fnetdev?useSSL=false
+  user: fnetdev
+  password: fnetdev
     # driver-class-name: org.mariadb.jdbc.Driver
 spring:
-    thymeleaf:
-        cache: false
+  thymeleaf:
+    cache: false
+  servlet:
+    session:
+      timeout: 10s
  # hibernate:
      # dialect: org.hibernate.dialect.MariaDB103Dialect
      # hbm2ddl:

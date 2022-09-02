@@ -15,10 +15,11 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.orbital3d.server.fnet.service.item.ServiceItem;
+
 @Entity
 @Table(name = "comment")
-public class Comment
-{
+public class Comment implements ServiceItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long commentId;
@@ -38,13 +39,12 @@ public class Comment
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timestamp;
 
-	protected Comment()
-	{
+	protected Comment() {
 		// For JPA
 	}
 
-	private Comment(Long commentId, @NotNull Long itemId, @NotNull Long groupId, @NotNull Long userId, @NotNull String comment, Date timestamp)
-	{
+	private Comment(Long commentId, @NotNull Long itemId, @NotNull Long groupId, @NotNull Long userId,
+			@NotNull String comment, Date timestamp) {
 		super();
 		this.commentId = commentId;
 		this.itemId = itemId;
@@ -54,81 +54,66 @@ public class Comment
 		this.timestamp = timestamp;
 	}
 
-	public Long getCommentId()
-	{
+	public Long getCommentId() {
 		return commentId;
 	}
 
-	public void setId(Long commentId)
-	{
+	public void setId(Long commentId) {
 		this.commentId = commentId;
 	}
 
-	public Long getItemId()
-	{
+	public Long getItemId() {
 		return itemId;
 	}
 
-	public void setItemId(Long itemId)
-	{
+	public void setItemId(Long itemId) {
 		this.itemId = itemId;
 	}
 
-	public Long getGroupId()
-	{
+	public Long getGroupId() {
 		return groupId;
 	}
 
-	public void setGroupId(Long groupId)
-	{
+	public void setGroupId(Long groupId) {
 		this.groupId = groupId;
 	}
 
-	public Long getUserId()
-	{
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId)
-	{
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
-	public String getComment()
-	{
+	public String getComment() {
 		return comment;
 	}
 
-	public void setComment(String comment)
-	{
+	public void setComment(String comment) {
 		this.comment = comment;
 	}
 
-	public Date getTimestamp()
-	{
+	public Date getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(Date timestamp)
-	{
+	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
 
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(7, 9, this);
 	}
 
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		return EqualsBuilder.reflectionEquals(this, obj, false);
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
 
@@ -143,8 +128,8 @@ public class Comment
 	 * @param timestamp
 	 * @return
 	 */
-	public static Comment of(Long commentId, @NotNull Long itemId, @NotNull Long groupId, @NotNull Long userId, @NotNull String comment, Date timestamp)
-	{
+	public static Comment of(Long commentId, @NotNull Long itemId, @NotNull Long groupId, @NotNull Long userId,
+			@NotNull String comment, Date timestamp) {
 		return new Comment(commentId, itemId, groupId, userId, comment, timestamp);
 	}
 }

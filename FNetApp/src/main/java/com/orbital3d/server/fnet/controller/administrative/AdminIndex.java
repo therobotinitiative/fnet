@@ -7,6 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * Administrative index page controller.
+ * 
+ * @author msiren
+ *
+ */
 @Controller
 public class AdminIndex {
 

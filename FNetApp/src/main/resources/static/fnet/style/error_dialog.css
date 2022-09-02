@@ -1,0 +1,25 @@
+.error-dialog {
+	border-radius: var(--border-radius);
+	border-width: var(--border-width);
+	border-style: var(--border-style);
+	border-color: red;
+	background-color: black;
+	padding: 8px;
+}
+
+.error-dialog-content {
+	background-color: black;
+	color: red;
+}
+
+.error-dialog-content h1 {
+	background-color: black;
+	color: red;
+	border-left: 0px;
+	border-right: 0px;
+	border-top: 0px;
+	border-bottom: 2px;
+	border-style: dashed;
+	border-color: red;
+	margin-top: 2px;
+}

@@ -26,6 +26,12 @@ import com.orbital3d.web.security.weblectricfence.exception.AuthenticationExcept
 import com.orbital3d.web.security.weblectricfence.util.FenceUtil;
 import com.orbital3d.web.security.weblectricfence.util.HashUtil;
 
+/**
+ * Controller for authentication related operations.
+ * 
+ * @author msiren
+ *
+ */
 @Controller
 public class AuthenticationController {
 
@@ -43,14 +49,14 @@ public class AuthenticationController {
 	 */
 	@GetMapping("/login")
 	protected ModelAndView login() {
-		ModelAndView mav = new ModelAndView("login");
-		mav.addObject("reason", "");
+		ModelAndView modelAndView = new ModelAndView("login");
+		modelAndView.addObject("reason", "");
 		try {
-			mav.addObject("token", createToken());
+			modelAndView.addObject("token", createToken());
 		} catch (NoSuchAlgorithmException e) {
 			// Fail silently
 		}
-		return mav;
+		return modelAndView;
 	}
 
 	/**
@@ -73,7 +79,8 @@ public class AuthenticationController {
 		FenceUtil.login(UsernamePasswordToken.of(userName, password));
 		// Update login information
 		Optional<User> user = userService.findUserByName(userName);
-		Optional<UserData> userData = userDataService.findById(user.get().getUserId());
+//		FenceUtil.setSubject( user.get());
+		Optional<UserData> userData = userDataService.getById(user.get().getUserId());
 		userDataService.updateLastLogin(user.get());
 		// Fill session data
 		sessionService.setCurrentUser(user.get());

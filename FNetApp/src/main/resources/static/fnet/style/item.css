@@ -1,0 +1,8 @@
+ul.item_list {
+	padding-left: 0px;
+	list-style-type: none;
+}
+
+ul.item_list li:hover {
+	background-color: var(--color-darker);
+}

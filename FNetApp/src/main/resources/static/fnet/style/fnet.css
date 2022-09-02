@@ -2,6 +2,11 @@
 @import "common.css";
 @import "navigation.css";
 @import "admin.css";
+@import "dialog.css";
+@import "error_dialog.css";
+@import "information_dialog.css";
+@import "item.css";
+@import "comment.css";
 
 body {
 	background: var(--color-main);
@@ -21,6 +26,14 @@ div.fnet-main {
 }
 
 footer {
-	background-color: var(--color-darker)
+	background-color: var(--color-darker);
 	padding: 4px;
+}
+
+section {
+	border-color: var(--color-lighter);
+	border-style: solid;
+	border-width: 2px;
+	border-radius: 8px;
+	padding: 4px;	
 }

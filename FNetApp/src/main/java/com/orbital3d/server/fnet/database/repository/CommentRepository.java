@@ -5,6 +5,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 import javax.transaction.Transactional.TxType;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -25,4 +26,9 @@ public interface CommentRepository extends CrudRepository<Comment, Long> {
 
 	@Query("SELECT itemId FROM Comment ce WHERE ce.commentId=:commentId")
 	Long findItemIdByCommentId(@Param("commentId") Long commentId);
+
+	@Query("FROM Comment ce WHERE ce.groupId=:groupId ORDER BY ce.timestamp DESC")
+	List<Comment> findLatestLimited(@Param("groupId") Long groupId, Pageable pageable);
+
+	Iterable<Comment> findByItemId(Long parentId);
 }

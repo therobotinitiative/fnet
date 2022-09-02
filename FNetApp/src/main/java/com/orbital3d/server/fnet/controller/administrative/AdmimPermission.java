@@ -20,9 +20,15 @@ import com.orbital3d.server.fnet.service.PermissionService;
 import com.orbital3d.server.fnet.service.UserService;
 import com.orbital3d.web.security.weblectricfence.annotation.RequiresPermission;
 
+/**
+ * Administrative controller for {@link Permission} related operations.
+ * 
+ * @author msiren
+ *
+ */
 @RestController
 @RequestMapping(value = "/fnet/admin/permission")
-public class PermissionController {
+public class AdmimPermission {
 	@Autowired
 	private UserService userService;
 
@@ -48,12 +54,12 @@ public class PermissionController {
 	@Transactional
 	@RequiresPermission(FnetPermissions.Administrator.User.UPDATE_PERMISSIONS)
 	protected void updatePermissions(@RequestBody Set<String> permissions, @PathVariable Long userId) {
-		Set<PermissionEntity> perms = new HashSet<>();
-		permissionService.removeAll(userService.findById(userId).get());
-		permissions.forEach(perm -> {
-			perms.add(PermissionEntity.of(userId, perm));
+		Set<PermissionEntity> newPermissions = new HashSet<>();
+		permissionService.removeAll(userService.getById(userId).get());
+		permissions.forEach(permission -> {
+			newPermissions.add(PermissionEntity.of(userId, permission));
 		});
-		permissionService.addAll(perms);
+		permissionService.addAll(newPermissions);
 	}
 
 	/**
@@ -63,11 +69,11 @@ public class PermissionController {
 	@GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequiresPermission(FnetPermissions.Administrator.User.PERMISSIONS)
 	protected Iterable<String> getUserPermissions(@PathVariable Long userId) {
-		Set<String> perms = new HashSet<>();
-		permissionService.forUser(userService.findById(userId).get()).forEach(pe -> {
-			perms.add(pe.getPermission());
+		Set<String> permssions = new HashSet<>();
+		permissionService.forUser(userService.getById(userId).get()).forEach(permission -> {
+			permssions.add(permission.getPermission());
 		});
-		return perms;
+		return permssions;
 	}
 
 }

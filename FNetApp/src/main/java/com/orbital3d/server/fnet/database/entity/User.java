@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.orbital3d.server.fnet.service.item.ServiceItem;
 import com.orbital3d.web.security.weblectricfence.type.UserIdentity;
@@ -86,10 +85,14 @@ public class User implements ServiceItem, UserIdentity {
 
 	@Override
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
+		return "[" + this.userId + "](" + this.userName + ")";
 	}
 
 	public static User of(Long userId, String userName, byte[] password, byte[] salt) {
 		return new User(userId, userName, password, salt);
+	}
+
+	public static User of(Long userId) {
+		return new User(userId, null, null, null);
 	}
 }

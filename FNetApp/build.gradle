@@ -37,6 +37,7 @@ dependencies {
     implementation group: 'org.hibernate', name: 'hibernate-c3p0', version: '5.6.4.Final'
 	implementation group: 'com.mchange', name: 'c3p0', version: '0.9.5.2'
 	implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+	implementation 'org.apache.commons:commons-collections4:4.1'
 
 	// Weblectric Fence
 	implementation 'com.orbital3d.web.security:we-core:0.2-SNAPSHOT'

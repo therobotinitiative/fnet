@@ -17,12 +17,24 @@ import com.orbital3d.server.fnet.security.FnetPermissions;
 import com.orbital3d.server.fnet.service.UserDataService;
 import com.orbital3d.web.security.weblectricfence.annotation.RequiresPermission;
 
+/**
+ * Administrative controller for {@link UserData} related operations.
+ * 
+ * @author msiren
+ *
+ */
 @RestController
 @RequestMapping("/fnet/admin/userdata")
 public class AdminUserData {
 	@Autowired
 	private UserDataService userDataService;
 
+	/**
+	 * DTO class user data.
+	 * 
+	 * @author msiren
+	 *
+	 */
 	private static final class UserDataDTO {
 		private Long userId;
 		private String firstName;
@@ -58,7 +70,7 @@ public class AdminUserData {
 	@GetMapping("/{userId}")
 	@RequiresPermission(FnetPermissions.Administrator.Userdata.GET)
 	protected UserData getUserData(@PathVariable Long userId) {
-		Optional<UserData> userData = userDataService.findById(userId);
+		Optional<UserData> userData = userDataService.getById(userId);
 		if (userData.isPresent()) {
 			return userData.get();
 		} else {
@@ -73,7 +85,7 @@ public class AdminUserData {
 	@RequiresPermission(FnetPermissions.Administrator.Userdata.UPDATE)
 	@Transactional
 	protected void updateUserData(@RequestBody UserDataDTO userDataDTO) {
-		Optional<UserData> uerData = userDataService.findById(userDataDTO.getUserId());
+		Optional<UserData> uerData = userDataService.getById(userDataDTO.getUserId());
 		if (uerData.isPresent()) {
 			uerData.get().setFirstName(userDataDTO.getFirstName());
 			uerData.get().setLastName(userDataDTO.getLastName());

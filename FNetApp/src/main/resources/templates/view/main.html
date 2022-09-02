@@ -1,2 +1,43 @@
 FNeet main view, noyhing to see here!<br>
-{{session.username}}
+{{current.user.userName}}
+
+<section>
+	<span ng-if="current.view != current.root_view">
+		Back
+	</span>
+	<ul class="item_list pointer">
+		<li ng-repeat="itemdto in current.items">
+			<span>
+				<!--  icon -->
+			</span>
+			<span>
+				<!-- Folder link -->
+				<a href="#!/main/{{itemdto.item.itemId}}" ng-if="itemdto.item.itemType == 'FOLDER'">
+					{{itemdto.item.name}}
+				</a>
+				<!--  download link -->
+				<a href="/fnet/download/{{itemdto.item.itemId}}" ng-if="itemdto.item.itemType != 'FOLDER'">
+					{{itemdto.item.name}}
+				</a>
+			</span>
+			<span class="pull-right" ng-if="itemdto.item.itemType == 'FOLDER'">
+				({{itemdto.commentCount}})
+			</span>
+		</li>
+	</ul>
+</section>
+<section ng-if="current.comments.length > 0">
+	<h2>Comments:</h2>
+	<section class="comment" ng-repeat="comment in current.comments">
+		<span>
+			<h4>{{comment.userName}}</h4> wrote on {{comment.timestamp | date: 'dd.MM.yyyy'}}
+		</span>
+		<span ng-if="comment.userId == current.user.userId" class="pull-right">
+			delete
+		</span>
+		<br>
+		<p>
+			{{comment.comment}}
+		</p>
+	</section>
+</section>

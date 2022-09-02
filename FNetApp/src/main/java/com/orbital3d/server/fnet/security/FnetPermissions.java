@@ -5,6 +5,12 @@ import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * FNet permissions.
+ * 
+ * @author msiren
+ *
+ */
 public final class FnetPermissions {
 
 	public static class Administrator {
@@ -22,6 +28,7 @@ public final class FnetPermissions {
 		public static class GroupOperation {
 			public static final String LIST = "admin:group:list";
 			public static final String CREATE = "admin:group:create";
+			public static final String DELETE = "admin:group:delete";
 		}
 
 		public static final class Userdata {
@@ -34,6 +41,12 @@ public final class FnetPermissions {
 		}
 	}
 
+	/**
+	 * @return {@link Set} of all permissions
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws SecurityException
+	 */
 	public static Set<String> allPermissions()
 			throws IllegalArgumentException, IllegalAccessException, SecurityException {
 		Set<String> permissions = new HashSet<>();

@@ -2,26 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<title>FNet 2.0</title>
+		<script th:inline="javascript">
+			var session = {
+				user: /*[[${user}]]*/null,
+				user_data: /*[[${user_data}]]*/null,
+				active_group: /*[[${activegroup}]]*/null,
+				groups: /*[[${groups}]]*/null,
+				current_view: null,
+				root_view: /*[[${rootview}]]*/null,
+			};
+			console.log('From server');
+		</script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 		<script src="/fnet/js/angular-route.js"></script>
 		<script src="/fnet/js/checklist-model.js"></script>
 		<script src="/fnet/js/fnet.js"></script>
 		<script src="/fnet/js/admin.js"></script>
-		<script th:inline="javascript">
-			var group_id = /*[[${activegroup}]]*/null;
-			var session = {
-				user: /*[[${user}]]*/null,
-				group: null,
-				current_view: null,
-				username: /*[[${username}]]*/null,
-			};
-		</script>
 		
 		<link rel="stylesheet" href="/fnet/style/fnet.css">
 	</head>
 	<body>
 		<div ng-controller="fc" class="fnet-main" ng-app="fnet">
-			<img src="/fnet/images/logo.png">
+			<a href="/fnet#!/main">
+				<img src="/fnet/images/logo.png">
+			</a>
 			<nav>
 				<ul class="navigation-bar">
 					<li class="navigation-item">
@@ -32,11 +36,15 @@
 					</li>
 					<li class="navigation-item">
 						<!-- Grups -->
-						&nbsp;
+						<span ng-if="current.user_groups.length > 1">
+							<select ng-model="current.user_groups">
+								<option  ng-repeat="group in current.user_groups" ng-value="group.groupId" ng-select="group.groupId == current.active_group">{{group.name}}</option>
+							</select> 
+						</span>
 					</li>
 					<li class="navigation-item">
 						<!-- Latest -->
-						Files: (10) Comments:(20)
+						Files: ({{latest_container.data.numberOfItems}}) Comments:({{latest_container.data.numberOfComments}})
 					</li>
 					<li class="navigation-item pull-right">
 						<a href="/logout">Logout</a>
@@ -49,9 +57,40 @@
 					&copy; 2022 Orbital3d Studios
 				</span>
 				<span class="pull-right" th:text="${fnetversion}">
-					No Attribute
+					not working
 				</span>
 			</footer>
+			<button ng-click="errorDialog.show('Testing error', 'Nothing went wrong')">Error</button>
+			<button ng-click="information.show('Information')">Info</button>
+			<button ng-click="info()">Multiple Info</button>
+			
+<!-- Error dialog -->
+<div class="modal-background" ng-if="errorDialog.visible == true">
+	<div class="center-dialog error-dialog" ng-click="errorDialog.hide()">
+		<div class="dialog-content error-dialog-content">
+			<h1>{{errorDialog.message}}</h1>
+			<center>
+				<label>
+					{{errorDialog.description}}
+				</label>
+			</center>
 		</div>
+	</div>
+</div>
+	
+<!-- ---------- Information Dialog --------------- -->
+<div class="modal-background" ng-if="information.visible == true">
+	<div class="center-dialog information-dialog" ng-click="information.hide()">
+		<div class="dialog-content information-content">
+			<h1>
+				{{information.message}}
+			</h1>
+		</div>
+	</div>
+</div>
+		</div>
+		
+
+		
 	</body>
 </html>

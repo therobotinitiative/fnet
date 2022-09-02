@@ -15,34 +15,34 @@ import com.orbital3d.server.fnet.service.PermissionService;
 public class PermissionServiceImpl implements PermissionService {
 
 	@Autowired
-	private PermissionRepository pr;
+	private PermissionRepository prermissionRepository;
 
 	@Override
 	@Transactional(TxType.REQUIRED)
 	public void add(PermissionEntity permission) {
-		pr.save(permission);
+		prermissionRepository.save(permission);
 	}
 
 	@Override
 	@Transactional(TxType.REQUIRED)
 	public void remove(PermissionEntity permission) {
-		pr.delete(permission);
+		prermissionRepository.delete(permission);
 	}
 
 	@Override
 	@Transactional(TxType.REQUIRED)
 	public void removeAll(User user) {
-		pr.deleteAll(pr.findByUserId(user.getUserId()));
+		prermissionRepository.deleteAll(prermissionRepository.findByUserId(user.getUserId()));
 	}
 
 	@Override
 	public Iterable<PermissionEntity> forUser(User user) {
-		return pr.findByUserId(user.getUserId());
+		return prermissionRepository.findByUserId(user.getUserId());
 	}
 
 	@Override
 	public void addAll(Iterable<PermissionEntity> permissions) {
-		pr.saveAll(permissions);
+		prermissionRepository.saveAll(permissions);
 	}
 
 }

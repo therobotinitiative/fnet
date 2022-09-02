@@ -25,8 +25,14 @@ import com.orbital3d.server.fnet.service.UserDataService;
 import com.orbital3d.server.fnet.service.UserService;
 import com.orbital3d.web.security.weblectricfence.util.HashUtil;
 
+/**
+ * Controller for initializing Fnet.
+ * 
+ * @author msiren
+ *
+ */
 @RestController
-public class InitializeController {
+public class Initialize {
 	@Autowired
 	private UserService userService;
 
@@ -61,19 +67,20 @@ public class InitializeController {
 	public RedirectView setPassword(@RequestBody String password) throws NoSuchAlgorithmException {
 		if (userService.findUserByName("administrator").isEmpty()) {
 			// initialize only if not present
+			Long userId = sessionService.getCurrentUser().getUserId();
 			Group adminGroup = groupService.create("administrator");
 			// do the pwd stuff
 			byte[] salt = HashUtil.generateToken();
 			byte[] hashedPassword = HashUtil.secureHash(ArrayUtils.addAll(password.getBytes(), salt));
 			User adminUser = User.of(null, "administrator", hashedPassword, salt);
 			adminUser = userService.save(adminUser);
-			userDataService.save(UserData.of(adminUser.getUserId(), "Admin", "Admin", "admin@fnet.com", new Date(), "n/a", adminGroup.getGroupId(),
-					new Date(), new Date()));
+			userDataService.save(UserData.of(adminUser.getUserId(), "Admin", "Admin", "admin@fnet.com", new Date(),
+					"n/a", adminGroup.getGroupId(), new Date(), new Date()));
 			mappingService.addUser(adminUser, adminGroup);
 			permissionService.add(PermissionEntity.of(adminUser.getUserId(), "*"));
 			sessionService.setCurrentUser(adminUser);
 			sessionService.setCurrentGroup(adminGroup);
-			itemService.createRoot(adminGroup);
+			itemService.createRoot(adminGroup, userId);
 		}
 		return new RedirectView("/login");
 	}

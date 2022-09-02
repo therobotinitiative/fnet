@@ -9,12 +9,23 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.orbital3d.server.fnet.service.item.ServiceItem;
 
+/**
+ * Interface for service level CRUD operations.
+ * 
+ * @author msiren
+ *
+ * @param <S> Service item type
+ * @param <T> CrudRepository type
+ */
 public interface CrudService<S extends ServiceItem, T extends CrudRepository<S, Long>> {
+	/**
+	 * @return Repository used for operations
+	 */
 	default T getRepository() {
 		return null;
 	}
 
-	default Optional<S> findById(Long id) {
+	default Optional<S> getById(Long id) {
 		return getRepository().findById(id);
 	}
 

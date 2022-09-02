@@ -11,24 +11,24 @@
 	--size-text: 14px;
 	--fnet-font-family: Verdana, Arial, sans-serif, system;
 	
-	/* ======== Border =========== 
-	--fnet-border-color: rgb(92, 141, 162);
-	--fnet-border-radius: 8px;
-	--fnet-border-style: solid;
-	--fnet-border-width: 2px;
+	/* ======== Border =========== */
+	--border-color: rgb(92, 141, 162);
+	--border-radius: 8px;
+	--border-style: solid;
+	--border-width: 2px;
 	
-	--fnet-small-padding: 6px;
-	--fnet-large-padding: 10px;
+	--small-padding: 6px;
+	--large-padding: 10px;
 	--fnet-small-margin: 6px;
 	--fnet-large-margin: 10px;
 	
-	--fnet-icon-size-small: 16px;
-	--fnet-icon-size-large: 26px;
-	--fnet-dialog-icon-widrh: 32px;
-	--fnet-dialog-icon-height: 32px;
+	--icon-size-small: 16px;
+	--icon-size-large: 26px;
+	--dialog-icon-widrh: 32px;
+	--dialog-icon-height: 32px;
 	
-	--fnet-footer-color: rgb(30, 55, 55);
+	--footer-color: rgb(30, 55, 55);
 	
-	--fnet-button-color: rgb(61, 125, 157);
-	--fnet-button-color-hover: rgb(79, 177, 227);*/
+	--button-color: rgb(61, 125, 157);
+	--button-color-hover: rgb(79, 177, 227);
 }

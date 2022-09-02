@@ -1,0 +1,11 @@
+ul.admin-group-list {
+	list-style: none;
+	padding-left: 0px;
+}
+
+ul.admin-group-list li {
+	padding: 8spx;
+	margin-bottom: 4px;
+	background-color: var(--color-darker);
+}
+

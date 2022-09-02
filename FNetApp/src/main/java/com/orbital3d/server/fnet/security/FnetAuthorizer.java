@@ -1,5 +1,6 @@
 package com.orbital3d.server.fnet.security;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -7,6 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.orbital3d.server.fnet.database.entity.PermissionEntity;
 import com.orbital3d.server.fnet.database.entity.User;
 import com.orbital3d.server.fnet.service.PermissionService;
 import com.orbital3d.web.security.weblectricfence.authorization.AuthorizationWorker.Authorizer;
@@ -33,7 +35,13 @@ public class FnetAuthorizer implements Authorizer {
 	@Override
 	public void gatherPermissions(WebLectricSubject su) {
 		Set<Permission> pset = new HashSet<>();
-		permissionService.forUser(((User) su.getIdentity())).forEach(perm -> pset.add(Permission.of(perm.getPermission())));
+		Iterator<PermissionEntity> iter = permissionService.forUser((User) su.getIdentity()).iterator();
+		while (iter.hasNext()) {
+			pset.add(Permission.of(iter.next().getPermission()));
+		}
+		if (pset.size() < 1) {
+			pset = Collections.emptySet();
+		}
 		su.setPermissions(pset);
 	}
 

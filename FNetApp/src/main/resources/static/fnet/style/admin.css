@@ -1,36 +1,7 @@
-ul.admin-menu {
-	list-style: none;
-	padding-left: 0px;
-}
-
-ul.admin-menu li {
-	display: inline;
-	list-style: none;
-	padding-left: 0px;
-	height: 30px;
-	width: 300px;
-}
+@import "admin_menu.css";
+@import "admin_group_list.css";
 
 .active-view {
-	background-color: var(--color-light);
-}
-
-ul.admin-group-list {
-	list-style: none;
-	padding-left: 0px;
-}
-
-ul.admin-group-list li {
-	padding: 3px;
-	margin-bottom: 2px;
-	background-color: var(--color-darker);
-}
-
-ul.admin-menu li {
-	cursor: pointer;
-}
-
-ul.admin-menu li:hover {
 	background-color: var(--color-light);
 }
 
@@ -38,6 +9,7 @@ ul.admin-user-list li {
 	cursor: pointer;
 	margin: 0px;
 	height: 30px;
+	padding: 4px;
 }
 
 ul.admin-user-list {
@@ -76,6 +48,15 @@ section.admin {
 section.admin-user-section {
 	display: inline;
 	width: 50%;
+}
+
+section.sbs {
+	display: inline;
+}
+
+section.sbs section {
+	display: inline;
+	width:50%;
 }
 
 h1, h3 {
