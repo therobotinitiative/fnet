@@ -72,7 +72,7 @@ public class Initialize {
 			// do the pwd stuff
 			byte[] salt = HashUtil.generateToken();
 			byte[] hashedPassword = HashUtil.secureHash(ArrayUtils.addAll(password.getBytes(), salt));
-			User adminUser = User.of(null, "administrator", hashedPassword, salt);
+			User adminUser = User.of("administrator", hashedPassword, salt);
 			adminUser = userService.save(adminUser);
 			userDataService.save(UserData.of(adminUser.getUserId(), "Admin", "Admin", "admin@fnet.com", new Date(),
 					"n/a", adminGroup.getGroupId(), new Date(), new Date()));

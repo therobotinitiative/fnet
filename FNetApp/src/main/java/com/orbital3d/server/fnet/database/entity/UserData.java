@@ -47,8 +47,8 @@ public class UserData implements ServiceItem {
 		// For JPA
 	}
 
-	private UserData(Long userId, String firstName, String lastName, String email, Date lastLogin,
-			String lastLoginIp, Long lastActiveGroup, Date created, Date passwordChanged) {
+	private UserData(Long userId, String firstName, String lastName, String email, Date lastLogin, String lastLoginIp,
+			Long lastActiveGroup, Date created, Date passwordChanged) {
 		super();
 		this.userId = userId;
 		this.firstName = firstName;
@@ -152,5 +152,9 @@ public class UserData implements ServiceItem {
 			String lastLoginIp, Long lastActiveGroup, Date created, Date passwordChanged) {
 		return new UserData(userId, firstName, lastName, email, lastLogin, lastLoginIp, lastActiveGroup, created,
 				passwordChanged);
+	}
+
+	public static UserData of(Long userId) {
+		return new UserData(userId, null, null, null, null, null, null, null, null);
 	}
 }

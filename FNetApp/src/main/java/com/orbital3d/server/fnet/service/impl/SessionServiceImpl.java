@@ -41,4 +41,14 @@ public class SessionServiceImpl implements SessionService {
 		set(SesssionKey.CURRENT_ACTIVE_GROUP, group);
 	}
 
+	@Override
+	public boolean isSessionActive() {
+		try {
+			return FenceUtil.getSession() != null ? true : false;
+		} catch (Throwable t) {
+			// Fail silently
+		}
+		return false;
+	}
+
 }

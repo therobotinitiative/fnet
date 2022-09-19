@@ -1,14 +1,28 @@
-FNeet main view, noyhing to see here!<br>
-{{current.user.userName}}
-
+<div ng-controller="itemController">
 <section>
 	<span ng-if="current.view != current.root_view">
-		Back
+		<div class="item-title-left">
+			<button back-button>
+				<img src="/fnet/svg/previous.svg" class="list-icon">
+			</button>
+		</div>
+		<div class="item-title-right">
+			<h2 class="item-list-title">
+				{{item.name}}
+			</h2>
+		</div>
 	</span>
 	<ul class="item_list pointer">
-		<li ng-repeat="itemdto in current.items">
+		<li ng-repeat="itemdto in item.items">
 			<span>
-				<!--  icon -->
+			<i ng-switch="itemdto.item.itemType">
+				<img src="/fnet/svg/folder.svg" class="list-icon" ng-switch-when="FOLDER" />
+				<img src="/fnet/svg/audio.svg" class="list-icon" ng-switch-when="AUDIO" />
+				<img src="/fnet/svg/video.svg" class="list-icon" ng-switch-when="VIDEO" />
+				<img src="/fnet/svg/image.svg" class="list-icon" ng-switch-when="IMAGE" />
+				<img src="/fnet/svg/document.svg" class="list-icon" ng-switch-when="DOCUMENT" />
+				<img src="/fnet/svg/file.svg" class="list-icon" ng-switch-default />
+			</i>
 			</span>
 			<span>
 				<!-- Folder link -->
@@ -21,23 +35,69 @@ FNeet main view, noyhing to see here!<br>
 				</a>
 			</span>
 			<span class="pull-right" ng-if="itemdto.item.itemType == 'FOLDER'">
+				<img src="/fnet/svg/comment.svg" class="list-icon">
 				({{itemdto.commentCount}})
 			</span>
 		</li>
 	</ul>
+	<button ng-click="upload.show()" class="pointer" ng-if="current.can_upload == true && current.view != current.root_view">Upload</button>
+	<button ng-click="current.show_add_folder()" ng-if="current.can_add_folder == true">Add Folder</button>
 </section>
-<section ng-if="current.comments.length > 0">
+<section ng-if="item.comments.length > 0">
 	<h2>Comments:</h2>
-	<section class="comment" ng-repeat="comment in current.comments">
+	<button ng-click="comment.show()" class="pointer" ng-if="current.can_comment == true">Comment</button>
+	<section class="comment" ng-repeat="commentdto in item.comments">
 		<span>
-			<h4>{{comment.userName}}</h4> wrote on {{comment.timestamp | date: 'dd.MM.yyyy'}}
+			<h4>{{commentdto.userName}}</h4> wrote on {{commentdto.timestamp | date: 'dd.MM.yyyy'}}
 		</span>
-		<span ng-if="comment.userId == current.user.userId" class="pull-right">
-			delete
+		<span class="pull-right cursor" ng-if="commentdto.userId == current.user.userId">
+			<img src="/fnet/svg/trash.svg" class="list-icon"  ng-click="comment.delete(commentdto.commentId)">
 		</span>
 		<br>
 		<p>
-			{{comment.comment}}
+			{{commentdto.comment}}
 		</p>
 	</section>
 </section>
+
+<!-- Upload dialog -->
+<div class="modal-background" ng-if="upload.visible == true">
+	<div class="center-dialog dialog-content upload-dialog">
+		<h1>
+			Upload to {{item.name}}
+		</h1>
+		<span ng-if="upload.in_progress == false">
+			Choose file:
+			<input type="file" id="file"><br>
+			<span class="pull-right">
+				<button ng-click="upload.submit()">Upload</button>
+				<button ng-click="upload.hide()">Cancel</button>
+			</span>
+		</span>
+		<span ng-if="upload.in_progress == true">
+			<div class="progress-bar" id="progressbar">
+			</div>
+		</span>
+	</div>
+</div>
+
+<!-- Comment dialog -->
+<div class="modal-background" ng-if="comment.visible == true">
+	<div class="center-dialog dialog-content comment-dialog">
+		<h1>
+			Comment {{item.name}}
+		</h1>
+		<span>
+			<form id="comment-form">
+				<textarea id="comment" width="15" height="5">
+				</textarea>
+			</form>
+			<span class="pull-right">
+				<button ng-click="comment.add_comment()">Comment</button>
+				<button ng-click="comment.hide()">Cancel</button>
+			</span>
+		</span>
+	</div>
+</div>
+
+</div>

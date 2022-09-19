@@ -9,6 +9,9 @@
 				active_group: /*[[${activegroup}]]*/null,
 				groups: /*[[${groups}]]*/null,
 				current_view: null,
+				can_upload: /*[[${canupload}]]*/null,
+				can_comment: /*[[${cancomment}]]*/null,
+				can_add_folder: /*[[${canaddfolder}]]*/null,
 				root_view: /*[[${rootview}]]*/null,
 			};
 			console.log('From server');
@@ -18,6 +21,7 @@
 		<script src="/fnet/js/checklist-model.js"></script>
 		<script src="/fnet/js/fnet.js"></script>
 		<script src="/fnet/js/admin.js"></script>
+		<script src="/fnet/js/item.js"></script>
 		
 		<link rel="stylesheet" href="/fnet/style/fnet.css">
 	</head>
@@ -31,7 +35,9 @@
 					<li class="navigation-item">
 						<span class="name" th:text="${username}">name</span>
 						<span th:if="${isadmin == true}">
-							<a href="/fnet#!/admin">admin</a>
+							<a href="/fnet#!/admin">
+								<img src="/fnet/svg/cogwheel.svg" class="list-icon">
+							</a>
 						</span>
 					</li>
 					<li class="navigation-item">
@@ -44,10 +50,15 @@
 					</li>
 					<li class="navigation-item">
 						<!-- Latest -->
-						Files: ({{latest_container.data.numberOfItems}}) Comments:({{latest_container.data.numberOfComments}})
+						<img src="/fnet/svg/file.svg" class="list-icon">
+						 ({{latest_container.data.numberOfItems}})
+						<img src="/fnet/svg/comment.svg" class="list-icon">
+						({{latest_container.data.numberOfComments}})
 					</li>
 					<li class="navigation-item pull-right">
-						<a href="/logout">Logout</a>
+						<a href="/logout">
+							<img src="/fnet/svg/exit.svg" class="list-icon">
+						</a>
 					</li>
 				</ul>
 			</nav>
@@ -63,6 +74,8 @@
 			<button ng-click="errorDialog.show('Testing error', 'Nothing went wrong')">Error</button>
 			<button ng-click="information.show('Information')">Info</button>
 			<button ng-click="info()">Multiple Info</button>
+			{{current.view}}<br>
+			{{current.items}}
 			
 <!-- Error dialog -->
 <div class="modal-background" ng-if="errorDialog.visible == true">
@@ -88,6 +101,8 @@
 		</div>
 	</div>
 </div>
+
+
 		</div>
 		
 

@@ -3,12 +3,46 @@ datasource:
   user: fnetdev
   password: fnetdev
     # driver-class-name: org.mariadb.jdbc.Driver
+storage:
+  path: C:/tmp/
 spring:
   thymeleaf:
     cache: false
   servlet:
     session:
       timeout: 10s
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+Configuration:
+  name: default
+  Properties:
+    Property:
+      name: log-path
+      value: "logs"
+  Appenders:
+    Console:
+      name: comsole_appender
+      target: SYSTEM_OUT
+      PatternLayout: "[fnet] [%-5level] %msg%n"
+  Loggers:
+   Root:
+     level: warn
+     AppenderRef:
+       - ref: console_appender
+   logger:
+     - name: com.orbital3d.server.fnet
+       level: trace
+       AppenderRef:
+         - ref: console_appender
+           level: trace
+   tracer:
+      - mame: org.springframework
+        level: trace
+        AppenderRef:
+          - ref: console_appender
+            level: trace
  # hibernate:
      # dialect: org.hibernate.dialect.MariaDB103Dialect
      # hbm2ddl:

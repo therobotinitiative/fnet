@@ -66,4 +66,12 @@ public class Group implements ServiceItem {
 	public static Group of(Long groupId, String name) {
 		return new Group(groupId, name);
 	}
+
+	public static Group of(Long groupId) {
+		return new Group(groupId, null);
+	}
+
+	public static Group of(String name) {
+		return new Group(null, name);
+	}
 }

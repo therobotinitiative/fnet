@@ -5,4 +5,11 @@ ul.item_list {
 
 ul.item_list li:hover {
 	background-color: var(--color-darker);
+	line-height: 36px;
+	transition: line-height 0.5s ease-out;
+}
+
+ul.item_list li {
+	line-height: 24px;
+	transition: line-height 0.5s ease-out;
 }

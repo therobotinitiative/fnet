@@ -156,7 +156,7 @@ public class AdminUser {
 	@Transactional
 	@RequiresPermission(FnetPermissions.Administrator.User.CREATE)
 	protected UserDTO addUser(@RequestBody CreateUserDTO userDto) throws NoSuchAlgorithmException {
-		User user = User.of(null, userDto.getUsername(), new byte[] { 0x00 }, new byte[] { 0x00 });
+		User user = User.of(userDto.getUsername(), new byte[] { 0x00 }, new byte[] { 0x00 });
 		// Create user
 		user = userService.save(user);
 		// Map to group
@@ -231,7 +231,7 @@ public class AdminUser {
 	protected void updateUserGroups(@PathVariable Long userId, @RequestBody Set<Long> groups) {
 		mappingService.deleteByUser(userService.getById(userId).get());
 		List<Group> newGroups = new ArrayList<>();
-		groups.forEach(groupId -> newGroups.add(Group.of(groupId, null)));
+		groups.forEach(groupId -> newGroups.add(Group.of(groupId)));
 		mappingService.addUser(userService.getById(userId).get(), newGroups);
 	}
 }

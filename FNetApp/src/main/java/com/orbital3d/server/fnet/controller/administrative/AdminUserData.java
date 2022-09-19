@@ -74,7 +74,7 @@ public class AdminUserData {
 		if (userData.isPresent()) {
 			return userData.get();
 		} else {
-			return UserData.of(userId, null, null, null, null, null, userId, null, null);
+			return UserData.of(userId);
 		}
 	}
 

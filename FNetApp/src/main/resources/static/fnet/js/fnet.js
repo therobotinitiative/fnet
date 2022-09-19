@@ -1,7 +1,7 @@
 var app = angular.module('fnet', ['ngRoute', 'checklist-model']);
 
 const LATEST = '/fnet/latest';
-const COMMENTS_GET = '/fnet/comment';
+const COMMENT_ADD = '/fnet/comment/add';
 
 /**
  * Intercept HTTP request error and use root scope error dialog.
@@ -48,9 +48,8 @@ app.config(['$httpProvider', '$routeProvider', function($httpProvider,$routeProv
 	$httpProvider.interceptors.push(interceptHttpError);
 	
 	// Define routes
-	$routeProvider.when('/admin', {
+	$routeProvider.when('/admin/:view?', {
 		templateUrl: '/fnet/admin/main',
-		controller: 'fc'
 	});
 	$routeProvider.when('/main/:view?', {
 		templateUrl: '/fnet/view/main',
@@ -121,7 +120,7 @@ app.run(function($rootScope, $timeout)
 				$rootScope.information.show(message);
 			}
 		}
-	};
+	}
 });
 
 /**
@@ -131,34 +130,15 @@ app.controller('fc', ['$scope', '$rootScope', '$http', '$routeParams', function(
 		$scope.current = {
 			view: session.root_view,
 			root_view: session.root_view,
-			items: null,
-			comments: [],
 			user: session.user,
 			user_data: session.user_data,
 			user_groups: session.groups,
 			active_group: session.active_group,
-			get:function() {
-				$scope.current.items = [];
-				$scope.current.comments = [];
-				$http.get('/fnet/item/' + $scope.current.view).then(function(response) {
-					if (response.status == 200) {
-						$scope.current.items = response.data;
-					}
-				});
-				if ($scope.current.view != $scope.current.root_view) {
-					console.log('getting comments');
-					$http.get(COMMENTS_GET + '/' + $scope.current.view).then(function(response) {
-						if (response.status == 200) {
-							$scope.current.comments = response.data;
-						}
-					})
-				}
-			},
-			go:function(view_id) {
-				console.log('go: ' + view_id);
-				$scope.current.view = view_id;
-				$scope.current.get();
-			}
+			previous: '',
+			current_name: 'todo: get name',
+			can_upload: session.can_upload,
+			can_comment: session.can_comment,
+			can_add_folder: session.can_add_folder,
 		};
 		$scope.latest_container = {
 			data: null,
@@ -170,10 +150,22 @@ app.controller('fc', ['$scope', '$rootScope', '$http', '$routeParams', function(
 				})
 			}
 		};
-		if ($routeParams.view != null) {
-			$scope.current.view = $routeParams.view;
+		if($routeParams.view == undefined) {
+			$routeParams.view = $scope.current.root_view;
 		}
+		$scope.current.view = $routeParams.view;
 		$scope.latest_container.get();
-		$scope.current.get();
 	}
 ]);
+
+app.directive( 'backButton', function() {
+    return {
+        restrict: 'A',
+        link: function( scope, element, attrs ) {
+            element.on( 'click', function () {
+                history.back();
+                scope.$apply();
+            } );
+        }
+    };
+});

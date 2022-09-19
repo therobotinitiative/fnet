@@ -72,7 +72,7 @@ public class AdminGroup {
 		if (StringUtils.isAllEmpty(groupDTO.getGroupName())) {
 			throw new IllegalArgumentException("Group name mst noy be empty");
 		}
-		Group newGroup = groupService.save(Group.of(null, groupDTO.getGroupName()));
+		Group newGroup = groupService.save(Group.of(groupDTO.getGroupName()));
 		itemService.createRoot(newGroup, sessionService.getCurrentUser().getUserId());
 		return newGroup;
 	}
@@ -84,6 +84,6 @@ public class AdminGroup {
 	@RequiresPermission(FnetPermissions.Administrator.GroupOperation.DELETE)
 	@Transactional
 	protected void deleteGroup(@PathVariable Long groupId) {
-		groupService.delete(Group.of(groupId, null));
+		groupService.delete(Group.of(groupId));
 	}
 }

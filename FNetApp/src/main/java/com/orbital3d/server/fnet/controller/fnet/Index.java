@@ -7,11 +7,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.orbital3d.server.fnet.database.entity.User;
 import com.orbital3d.server.fnet.database.entity.UserData;
+import com.orbital3d.server.fnet.security.FnetPermissions;
 import com.orbital3d.server.fnet.service.GroupService;
 import com.orbital3d.server.fnet.service.ItemService;
 import com.orbital3d.server.fnet.service.SessionService;
 import com.orbital3d.server.fnet.service.SettingsService;
 import com.orbital3d.server.fnet.service.item.SesssionKey;
+import com.orbital3d.web.security.weblectricfence.authorization.AuthorizationWorker.Authorizer;
+import com.orbital3d.web.security.weblectricfence.type.Permission;
+import com.orbital3d.web.security.weblectricfence.util.FenceUtil;
 
 /**
  * Controller for index page information.
@@ -64,8 +68,12 @@ public class Index {
 	@Autowired
 	private SettingsService settingsService;
 
+	@Autowired
+	private Authorizer authorizer;
+
 	@GetMapping("/fnet")
 	protected ModelAndView index() {
+		getPermissions();
 		ModelAndView modelAndViewv = new ModelAndView("fnet/index");
 		fillUserInformation(modelAndViewv);
 		return modelAndViewv;
@@ -80,5 +88,17 @@ public class Index {
 		modelAndView.addObject("user", SafeUser.of(sessionService.getCurrentUser()));
 		modelAndView.addObject("user_data", (UserData) sessionService.get(SesssionKey.CURRENT_USER_DATA));
 		modelAndView.addObject("rootview", itemService.findRoot(sessionService.getCurrentGroup()).getItemId());
+		modelAndView.addObject("canupload",
+				FenceUtil.getSubject().isPermitted(Permission.of(FnetPermissions.File.UPLOAD)));
+		modelAndView.addObject("cancomment",
+				FenceUtil.getSubject().isPermitted(Permission.of(FnetPermissions.Comment.CREATE)));
+		modelAndView.addObject("cancreatefoldr",
+				FenceUtil.getSubject().isPermitted(Permission.of(FnetPermissions.File.DOWNLOAD)));
+	}
+
+	private void getPermissions() {
+		if (FenceUtil.getSubject().getPermissions() == null) {
+			authorizer.gatherPermissions(FenceUtil.getSubject());
+		}
 	}
 }

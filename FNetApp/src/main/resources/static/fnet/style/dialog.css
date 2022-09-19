@@ -32,3 +32,22 @@ div.modal-background {
 	position: fixed;
 	background-color: rgba(0,0,0,0.6);
 }
+
+div.dialog-content {
+	background-color: var(--color-main);
+	border: 2px solid;
+	border-color: var(--color-light);
+	border-radius: 8px;
+	padding: 6px;
+}
+
+div.upload-content h1 {
+	background-color: var(--color-dark);
+	color: white;
+	padding: 4px;
+	margin-top: 0;
+	line-height: 60px;
+}
+
+div.upload-dialog {
+}

@@ -16,4 +16,6 @@ public interface SessionService {
 	void setCurrentUser(User user);
 
 	void setCurrentGroup(Group group);
+
+	boolean isSessionActive();
 }

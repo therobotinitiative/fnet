@@ -138,8 +138,12 @@ public class Item implements ServiceItem {
 		return ToStringBuilder.reflectionToString(this);
 	}
 
-	public static Item of(Long itemId, Long parentId, String name, ItemType itemType, Date timestamp,
-			Long groupId, Long userId) {
+	public static Item of(Long itemId, Long parentId, String name, ItemType itemType, Date timestamp, Long groupId,
+			Long userId) {
 		return new Item(itemId, parentId, name, itemType, timestamp, groupId, userId);
+	}
+
+	public static Item of(Long parentId, String name, ItemType itemType, Long groupId, Long userId) {
+		return new Item(null, parentId, name, itemType, new Date(), groupId, userId);
 	}
 }

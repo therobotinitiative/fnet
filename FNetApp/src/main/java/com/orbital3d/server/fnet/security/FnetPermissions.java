@@ -41,6 +41,21 @@ public final class FnetPermissions {
 		}
 	}
 
+	public static final class Comment {
+		public static final String CREATE = "comment:create";
+		public static final String DELETE = "comment:delete";
+	}
+
+	public static class File {
+		public static final String UPLOAD = "fnet:upload";
+		public static final String DOWNLOAD = "fnet:download";
+	}
+
+	public static final class Folder {
+		public static final String CREATE = "folder:create";
+		public static final String DELETE = "folder:delete";
+	}
+
 	/**
 	 * @return {@link Set} of all permissions
 	 * @throws IllegalArgumentException

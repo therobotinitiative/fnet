@@ -7,6 +7,7 @@
 @import "information_dialog.css";
 @import "item.css";
 @import "comment.css";
+@import "icon.css";
 
 body {
 	background: var(--color-main);
@@ -27,7 +28,7 @@ div.fnet-main {
 
 footer {
 	background-color: var(--color-darker);
-	padding: 4px;
+	padding: 6px;
 }
 
 section {

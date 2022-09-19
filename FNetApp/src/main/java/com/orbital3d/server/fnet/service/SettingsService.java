@@ -4,4 +4,6 @@ public interface SettingsService {
 	Integer latestDefaultLimit();
 
 	String administratorGroupName();
+
+	String storagePath();
 }

@@ -2,18 +2,21 @@ ul.navigation-bar {
 	list-disc-type: none;
 	padding-left: 0px;
 	text: var(--color-text);
+	background-color: var(--color-darker);
 }
 
 li.navigation-item {
 	display: inline;
-	border: 1px solid black;
 	width: 25%;
+	padding: 8px 16px;
+	margin: auto;
+}
+
+li.navigation-item:hover {
+	background-color: var(--color-dark);
 }
 
 li.navigation-item:last {
 	display: inline;
-	border: 1px solid black;
-	width: 25%;
-	text-align: right;
-	vertical-align: right;
+	float: right;
 }

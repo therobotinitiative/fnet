@@ -92,6 +92,10 @@ public class User implements ServiceItem, UserIdentity {
 		return new User(userId, userName, password, salt);
 	}
 
+	public static User of(String userName, byte[] password, byte[] salt) {
+		return new User(null, userName, password, salt);
+	}
+
 	public static User of(Long userId) {
 		return new User(userId, null, null, null);
 	}

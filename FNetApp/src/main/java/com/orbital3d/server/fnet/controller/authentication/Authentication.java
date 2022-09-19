@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import javax.security.auth.login.LoginException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +35,8 @@ import com.orbital3d.web.security.weblectricfence.util.HashUtil;
  *
  */
 @Controller
-public class AuthenticationController {
+public class Authentication {
+	private static final Logger LOG = LoggerFactory.getLogger(Authentication.class);
 
 	@Autowired
 	private UserDataService userDataService;
@@ -77,6 +80,7 @@ public class AuthenticationController {
 			throws AuthenticationException, LoginException {
 		// Perform login
 		FenceUtil.login(UsernamePasswordToken.of(userName, password));
+		LOG.info("{} logged in", userName);
 		// Update login information
 		Optional<User> user = userService.findUserByName(userName);
 //		FenceUtil.setSubject( user.get());
@@ -87,7 +91,7 @@ public class AuthenticationController {
 		sessionService.set(SesssionKey.CURRENT_USER_DATA, userDataService.findByUser(user.get()).get());
 		// Group name is irrelevant at this point maybe later fetch the Group object via
 		// service
-		sessionService.setCurrentGroup(Group.of(userDataService.findByUser(user.get()).get().getLastActiveGroup(), ""));
+		sessionService.setCurrentGroup(Group.of(userDataService.findByUser(user.get()).get().getLastActiveGroup()));
 		sessionService.set(SesssionKey.LOGIN_TIME, new Date());
 		sessionService.set(SesssionKey.LAST_LOGIN_TIME, userData.get().getLastLogin());
 		return new RedirectView("/fnet#!/main");
@@ -100,7 +104,12 @@ public class AuthenticationController {
 	 */
 	@GetMapping("/logout")
 	protected String logout() {
+		String userName = "no session";
+		if (sessionService.isSessionActive()) {
+			userName = sessionService.getCurrentUser().getUserName();
+		}
 		FenceUtil.logout();
+		LOG.info("{} logged out", userName);
 		return "/login";
 	}
 

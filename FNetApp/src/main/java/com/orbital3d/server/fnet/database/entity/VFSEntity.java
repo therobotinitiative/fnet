@@ -9,10 +9,11 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.orbital3d.server.fnet.service.item.ServiceItem;
+
 @Entity
 @Table(name = "vfs")
-public class VFSEntity
-{
+public class VFSEntity implements ServiceItem {
 	@Id
 	@NotNull
 	private Long parentId;
@@ -23,63 +24,52 @@ public class VFSEntity
 	@NotNull
 	private String originalName;
 
-	protected VFSEntity()
-	{
+	protected VFSEntity() {
 		// For JPA
 	}
 
-	private VFSEntity(@NotNull Long parentId, @NotNull String virtualName, @NotNull String originalName)
-	{
+	private VFSEntity(@NotNull Long parentId, @NotNull String virtualName, @NotNull String originalName) {
 		this.parentId = parentId;
 		this.virtualName = virtualName;
 		this.originalName = originalName;
 	}
 
-	public Long getParentId()
-	{
+	public Long getParentId() {
 		return parentId;
 	}
 
-	public void setParentId(Long parentId)
-	{
+	public void setParentId(Long parentId) {
 		this.parentId = parentId;
 	}
 
-	public String getVirtualName()
-	{
+	public String getVirtualName() {
 		return virtualName;
 	}
 
-	public void setVirtualName(String virtualName)
-	{
+	public void setVirtualName(String virtualName) {
 		this.virtualName = virtualName;
 	}
 
-	public String getOriginalName()
-	{
+	public String getOriginalName() {
 		return originalName;
 	}
 
-	public void setOriginalName(String originalName)
-	{
+	public void setOriginalName(String originalName) {
 		this.originalName = originalName;
 	}
 
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(77, 43, this);
 	}
 
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		return EqualsBuilder.reflectionEquals(this, obj, false);
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
 
@@ -91,8 +81,7 @@ public class VFSEntity
 	 * @param originalName
 	 * @return
 	 */
-	public static VFSEntity of(@NotNull Long parentId, @NotNull String virtualName, @NotNull String originalName)
-	{
+	public static VFSEntity of(@NotNull Long parentId, @NotNull String virtualName, @NotNull String originalName) {
 		return new VFSEntity(parentId, virtualName, originalName);
 	}
 }

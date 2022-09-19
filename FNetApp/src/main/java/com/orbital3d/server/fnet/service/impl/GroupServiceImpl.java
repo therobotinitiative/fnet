@@ -32,7 +32,7 @@ public class GroupServiceImpl implements GroupService {
 	@Override
 	@Transactional(TxType.REQUIRED)
 	public Group create(String name, boolean createRoot) {
-		return getRepository().save(Group.of(null, name));
+		return getRepository().save(Group.of(name));
 	}
 
 	@Override

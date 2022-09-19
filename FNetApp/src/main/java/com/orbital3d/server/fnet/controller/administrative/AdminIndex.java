@@ -25,8 +25,8 @@ public class AdminIndex {
 	@GetMapping("/fnet/admin/main")
 	protected String adminIndex(Model model) {
 		Map<String, String> menu = new LinkedHashMap<>();
-		menu.put("#!/admin?view=user", "Users");
-		menu.put("#!/admin?view=group", "Groups");
+		menu.put("#!/admin/user", "Users");
+		menu.put("#!/admin/group", "Groups");
 		model.addAttribute("menu", menu);
 		return "view/admin";
 	}

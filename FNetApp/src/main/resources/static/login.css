@@ -1,0 +1,113 @@
+:root {
+		--fnet-background-color: rgb(77, 85, 89);
+		--fnet-background-color-darker: rgb(62, 68, 71);
+		--fnet-font-color: white;
+		--fnet-font-size: 14px;
+		--fnet-font-family: Verdana, Arial, sans-serif, system;
+		--fnet-border-color: rgb(92, 141, 162);
+		--fnet-border-radius: 8px;
+		--fnet-border-style: solid;
+		--fnet-border-width: 2px;
+		--fnet-small-padding: 6px;
+		--fnet-large-padding: 10px;
+		--fnet-small-margin: 6px;
+	}
+			
+	input {
+		font-size: 140%;
+		padding: var(--fnet-small-padding);
+		background-color: var(--fnet-background-color-darker);
+		border-color: var(--fnet-border-color);
+		border-width: var(--fnet-border-width);
+		border-style: var(--fnet-border-style);
+		border-radius: var(--fnet-border-radius);
+		color: var(--fnet-font-color);
+		margin-top: var(--fnet-small-margin);
+		margin-bottom: var(--fnet-small-margin);
+	}
+	
+	input:focus {
+		border-color: white;
+	}
+	
+	input[type=password] {
+		color: red;
+	}
+
+	body {
+		background-color: var(--fnet-background-color);
+		color: var(--fnet-font-color);
+		font-family: var(--fnet-font-family);
+		font-size: var(--fnet-font-size);
+	}
+
+	div {
+		border-radius: var(--fnet-border-radius);
+		border-color: var(--fnet-border-color);
+		border-style: var(--fnet-border-style);
+		border-width: var(--fnet-border-width);
+		padding: var(--fnet-large-padding);
+		background-color: var(--fnet-background-color-darker);
+	}
+	
+	.center_dialog {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+	
+	form {
+		margin-top: 4px;
+		margin-bottom: 2px;
+	}
+	
+	button {
+		width: 100%;
+		background-color: #548198;
+		border-color: #548198;
+		border-radius: 4px;
+		transition: border-radius 2s ease-out;
+		color: white;
+		font-size: 16px;
+		margin-top: 6px;
+		padding: var(--fnet-large-padding);
+	}
+	
+	button:hover {
+		background-color: #6491A8;
+		border-radius: 10px;
+	}
+	
+	.title {
+		font-size: 130%;
+		background-color: rgb(102, 111, 128);
+		padding: var(--fnet-small-padding);
+		border-radius: 4px;
+		text-decoration: underline;
+		color: white;
+		transition: color 5s ease-out, border-radius 5s ease-out;
+	}
+	
+	.title:hover {
+		border-radius: 18px;
+		color: rgb(102, 111, 128);
+	}
+	
+	.error {
+		border-color: red;
+		border-wodth: 2px;
+		background-color: black;
+		color: red;
+		margin-top: 12px;
+	}
+	
+	input:invalid {
+		border-color: red;
+	}
+
+	.password-toggle {
+		width: 24px;
+		height: 24px;
+		color: white;
+	}
