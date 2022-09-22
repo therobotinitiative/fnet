@@ -17,6 +17,10 @@ import com.orbital3d.server.fnet.security.FnetPermissions;
 import com.orbital3d.server.fnet.service.UserDataService;
 import com.orbital3d.web.security.weblectricfence.annotation.RequiresPermission;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 /**
  * Administrative controller for {@link UserData} related operations.
  * 
@@ -35,32 +39,13 @@ public class AdminUserData {
 	 * @author msiren
 	 *
 	 */
+	@NoArgsConstructor(access = AccessLevel.PRIVATE)
+	@Getter
 	private static final class UserDataDTO {
 		private Long userId;
 		private String firstName;
 		private String lastName;
 		private String email;
-
-		private UserDataDTO() {
-			// Default
-		}
-
-		public Long getUserId() {
-			return userId;
-		}
-
-		public String getFirstName() {
-			return firstName;
-		}
-
-		public String getLastName() {
-			return lastName;
-		}
-
-		public String getEmail() {
-			return email;
-		}
-
 	}
 
 	/**

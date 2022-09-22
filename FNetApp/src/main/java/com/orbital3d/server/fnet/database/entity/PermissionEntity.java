@@ -10,59 +10,31 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.orbital3d.server.fnet.database.entity.composite.PermissionId;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "permission")
 @IdClass(PermissionId.class)
-public class PermissionEntity
-{
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PUBLIC, staticName = "of")
+@Getter
+public class PermissionEntity {
 	@Id
 	private Long userId;
 
 	@Id
 	private String permission;
 
-	private PermissionEntity()
-	{
-		// Default for JPA
-	}
-
-	private PermissionEntity(Long userId, String permission)
-	{
-		this.userId = userId;
-		this.permission = permission;
-	}
-
-	public Long getUserId()
-	{
-		return userId;
-	}
-
-	public String getPermission()
-	{
-		return permission;
-	}
-
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(137, 13, this);
 	}
 
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		return EqualsBuilder.reflectionEquals(obj, this, false);
-	}
-
-	/**
-	 * Static factory method.
-	 * 
-	 * @param userId     User id
-	 * @param permission Permission string
-	 * @return New {@link PermissionEntity} instance
-	 */
-	public static PermissionEntity of(final Long userId, final String permission)
-	{
-		return new PermissionEntity(userId, permission);
 	}
 }

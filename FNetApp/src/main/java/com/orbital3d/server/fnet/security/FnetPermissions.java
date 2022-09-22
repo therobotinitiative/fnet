@@ -65,17 +65,31 @@ public final class FnetPermissions {
 	public static Set<String> allPermissions()
 			throws IllegalArgumentException, IllegalAccessException, SecurityException {
 		Set<String> permissions = new HashSet<>();
-		for (Class<?> c : FnetPermissions.class.getClasses()) {
-			for (Class<?> c1 : c.getClasses()) {
-				for (Field field : c1.getFields()) {
-					// Only get the static final fields
-					if ((field.getModifiers() & Modifier.STATIC) != 0 && (field.getModifiers() & Modifier.FINAL) != 0
-							&& field.getType().equals(String.class)) {
-						Object object = field.get(null);
-						if (object.getClass().isAssignableFrom(String.class)) {
-							permissions.add((String) object);
-						}
-					}
+		for (Class<?> clazz : FnetPermissions.class.getClasses()) {
+			for (Class<?> innerClazz : clazz.getClasses()) {
+				permissions.addAll(getFieldPermissions(innerClazz.getFields()));
+			}
+			permissions.addAll(getFieldPermissions(clazz.getFields()));
+		}
+		return permissions;
+	}
+
+	/**
+	 * @param fields Fields to scan for static {@link String} fields
+	 * @return {@link Set} of permission String
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws SecurityException
+	 */
+	private static Set<String> getFieldPermissions(Field[] fields)
+			throws IllegalArgumentException, IllegalAccessException, SecurityException {
+		Set<String> permissions = new HashSet<>();
+		for (Field field : fields) {
+			// Only get the static final fields
+			if ((field.getModifiers() & Modifier.STATIC) != 0 && field.getType().equals(String.class)) {
+				Object object = field.get(null);
+				if (object.getClass().isAssignableFrom(String.class)) {
+					permissions.add((String) object);
 				}
 			}
 		}

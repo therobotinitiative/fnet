@@ -17,8 +17,18 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.orbital3d.server.fnet.service.item.ServiceItem;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
 @Table(name = "comment")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(staticName = "of")
+@Getter
+@Setter
 public class Comment implements ServiceItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,69 +49,6 @@ public class Comment implements ServiceItem {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timestamp;
 
-	protected Comment() {
-		// For JPA
-	}
-
-	private Comment(Long commentId, @NotNull Long itemId, @NotNull Long groupId, @NotNull Long userId,
-			@NotNull String comment, Date timestamp) {
-		super();
-		this.commentId = commentId;
-		this.itemId = itemId;
-		this.groupId = groupId;
-		this.userId = userId;
-		this.comment = comment;
-		this.timestamp = timestamp;
-	}
-
-	public Long getCommentId() {
-		return commentId;
-	}
-
-	public void setId(Long commentId) {
-		this.commentId = commentId;
-	}
-
-	public Long getItemId() {
-		return itemId;
-	}
-
-	public void setItemId(Long itemId) {
-		this.itemId = itemId;
-	}
-
-	public Long getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(Long groupId) {
-		this.groupId = groupId;
-	}
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
-	public String getComment() {
-		return comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-
-	public Date getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
-	}
-
 	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(7, 9, this);
@@ -115,21 +62,5 @@ public class Comment implements ServiceItem {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
-	}
-
-	/**
-	 * Static factory method.
-	 * 
-	 * @param commentId
-	 * @param itemId
-	 * @param groupId
-	 * @param userId
-	 * @param comment
-	 * @param timestamp
-	 * @return
-	 */
-	public static Comment of(Long commentId, @NotNull Long itemId, @NotNull Long groupId, @NotNull Long userId,
-			@NotNull String comment, Date timestamp) {
-		return new Comment(commentId, itemId, groupId, userId, comment, timestamp);
 	}
 }

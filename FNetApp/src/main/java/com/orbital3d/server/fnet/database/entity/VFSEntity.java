@@ -11,8 +11,17 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.orbital3d.server.fnet.service.item.ServiceItem;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
 @Table(name = "vfs")
+@NoArgsConstructor
+@AllArgsConstructor(staticName = "of")
+@Getter
+@Setter
 public class VFSEntity implements ServiceItem {
 	@Id
 	@NotNull
@@ -23,40 +32,6 @@ public class VFSEntity implements ServiceItem {
 
 	@NotNull
 	private String originalName;
-
-	protected VFSEntity() {
-		// For JPA
-	}
-
-	private VFSEntity(@NotNull Long parentId, @NotNull String virtualName, @NotNull String originalName) {
-		this.parentId = parentId;
-		this.virtualName = virtualName;
-		this.originalName = originalName;
-	}
-
-	public Long getParentId() {
-		return parentId;
-	}
-
-	public void setParentId(Long parentId) {
-		this.parentId = parentId;
-	}
-
-	public String getVirtualName() {
-		return virtualName;
-	}
-
-	public void setVirtualName(String virtualName) {
-		this.virtualName = virtualName;
-	}
-
-	public String getOriginalName() {
-		return originalName;
-	}
-
-	public void setOriginalName(String originalName) {
-		this.originalName = originalName;
-	}
 
 	@Override
 	public int hashCode() {
@@ -71,17 +46,5 @@ public class VFSEntity implements ServiceItem {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
-	}
-
-	/**
-	 * Static factory method.
-	 * 
-	 * @param parentId
-	 * @param virtualName
-	 * @param originalName
-	 * @return
-	 */
-	public static VFSEntity of(@NotNull Long parentId, @NotNull String virtualName, @NotNull String originalName) {
-		return new VFSEntity(parentId, virtualName, originalName);
 	}
 }

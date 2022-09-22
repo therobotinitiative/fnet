@@ -12,41 +12,24 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import com.orbital3d.server.fnet.database.entity.composite.UserGroupId;
 import com.orbital3d.server.fnet.service.item.ServiceItem;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
 @Table(name = "user_group_mapping")
 @IdClass(UserGroupId.class)
+@NoArgsConstructor
+@AllArgsConstructor(staticName = "of")
+@Getter
+@Setter
 public class UserGroupMapping implements ServiceItem {
 	@Id
 	private Long userId;
 
 	@Id
 	private Long groupId;
-
-	protected UserGroupMapping() {
-		// For JPA
-	}
-
-	private UserGroupMapping(Long userId, Long groupId) {
-		super();
-		this.userId = userId;
-		this.groupId = groupId;
-	}
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
-	public Long getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(Long groupId) {
-		this.groupId = groupId;
-	}
 
 	@Override
 	public int hashCode() {
@@ -61,16 +44,5 @@ public class UserGroupMapping implements ServiceItem {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
-	}
-
-	/**
-	 * Static factory method.
-	 * 
-	 * @param userId
-	 * @param groupId
-	 * @return
-	 */
-	public static UserGroupMapping of(Long userId, Long groupId) {
-		return new UserGroupMapping(userId, groupId);
 	}
 }

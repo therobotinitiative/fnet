@@ -16,6 +16,10 @@ import com.orbital3d.server.fnet.service.ItemService;
 import com.orbital3d.server.fnet.service.SessionService;
 import com.orbital3d.server.fnet.service.SettingsService;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * Controller for Fnet related operations.
  * 
@@ -31,8 +35,8 @@ public class Fnet {
 	 * @author msiren
 	 *
 	 */
-	// Getters used by framework
-	@SuppressWarnings("unused")
+	@AllArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
+	@Getter
 	private final static class LatestDTO {
 		private List<Item> items;
 		private int numberOfItems;
@@ -46,29 +50,13 @@ public class Fnet {
 			this.numberOfComments = comments.size();
 		}
 
-		public List<Item> getItems() {
-			return items;
-		}
-
-		public List<Comment> getComments() {
-			return comments;
-		}
-
-		public int getNumberOfItems() {
-			return numberOfItems;
-		}
-
-		public int getNumberOfComments() {
-			return numberOfComments;
-		}
-
 		/**
 		 * @param items    {@link List} of {@link Items}s
 		 * @param comments {@link List} of {@link Comment}s
 		 * @return New instance
 		 * @throws IllegalArgumentException If items or comments are null
 		 */
-		static LatestDTO of(List<Item> items, List<Comment> comments) {
+		private static LatestDTO of(List<Item> items, List<Comment> comments) {
 			if (items == null || comments == null) {
 				throw new IllegalArgumentException("Parameter must not be null");
 			}

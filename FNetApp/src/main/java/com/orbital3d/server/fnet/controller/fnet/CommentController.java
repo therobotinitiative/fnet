@@ -23,6 +23,10 @@ import com.orbital3d.server.fnet.service.SessionService;
 import com.orbital3d.server.fnet.service.UserService;
 import com.orbital3d.web.security.weblectricfence.annotation.RequiresPermission;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * Controller for {@link CommentController} related operations.
  * 
@@ -38,46 +42,14 @@ public class CommentController {
 	 * @author msiren
 	 *
 	 */
-	// Getters used by framework
-	@SuppressWarnings("unused")
+	@AllArgsConstructor(staticName = "of")
+	@Getter
 	private static final class CommentDTO {
 		private String comment;
 		private Date timestamp;
 		private String userName;
 		private Long userId;
 		private Long commentId;
-
-		private CommentDTO(String comment, Date timestamp, String userName, Long userId, Long commentId) {
-			this.comment = comment;
-			this.timestamp = timestamp;
-			this.userName = userName;
-			this.userId = userId;
-			this.commentId = commentId;
-		}
-
-		public String getComment() {
-			return comment;
-		}
-
-		public Date getTimestamp() {
-			return timestamp;
-		}
-
-		public String getUserName() {
-			return userName;
-		}
-
-		public Long getUserId() {
-			return userId;
-		}
-
-		public Long getCommentId() {
-			return commentId;
-		}
-
-		static CommentDTO of(String comment, Date timestamp, String userName, Long userId, Long commentId) {
-			return new CommentDTO(comment, timestamp, userName, userId, commentId);
-		}
 	}
 
 	/**
@@ -86,31 +58,14 @@ public class CommentController {
 	 * @author msiren
 	 *
 	 */
-	// Getters used by framework
-	@SuppressWarnings("unused")
+	@AllArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
+	@Getter
 	private static class AddCommentDTO {
 		private Long parentId;
 		private String comment;
 
-		private AddCommentDTO(Long parentId, String comment) {
-			this.parentId = parentId;
-			this.comment = comment;
-		}
-
 		private AddCommentDTO() {
 			// Default
-		}
-
-		public Long getParentId() {
-			return parentId;
-		}
-
-		public String getComment() {
-			return comment;
-		}
-
-		static AddCommentDTO of(Long parentId, String comment) {
-			return new AddCommentDTO(parentId, comment);
 		}
 	}
 

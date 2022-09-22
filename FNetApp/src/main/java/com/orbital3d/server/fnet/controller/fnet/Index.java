@@ -17,6 +17,10 @@ import com.orbital3d.web.security.weblectricfence.authorization.AuthorizationWor
 import com.orbital3d.web.security.weblectricfence.type.Permission;
 import com.orbital3d.web.security.weblectricfence.util.FenceUtil;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * Controller for index page information.
  * 
@@ -32,24 +36,11 @@ public class Index {
 	 * @author msiren
 	 *
 	 */
-	// Getters user by framework
-	@SuppressWarnings("unused")
+	@AllArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
+	@Getter
 	private final static class SafeUser {
 		private String userName;
 		private Long userId;
-
-		private SafeUser(String userName, Long userId) {
-			this.userName = userName;
-			this.userId = userId;
-		}
-
-		public String getUserName() {
-			return userName;
-		}
-
-		public Long getUserId() {
-			return userId;
-		}
 
 		static SafeUser of(User user) {
 			return new SafeUser(user.getUserName(), user.getUserId());

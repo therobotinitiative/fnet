@@ -12,8 +12,17 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.orbital3d.server.fnet.service.item.ServiceItem;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
 @Table(name = "user_group")
+@NoArgsConstructor
+@AllArgsConstructor(staticName = "of")
+@Getter
+@Setter
 public class Group implements ServiceItem {
 
 	@Id
@@ -21,32 +30,6 @@ public class Group implements ServiceItem {
 	private Long groupId;
 
 	private String name;
-
-	protected Group() {
-		// For JPA
-	}
-
-	private Group(Long groupId, String name) {
-		super();
-		this.groupId = groupId;
-		this.name = name;
-	}
-
-	public Long getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(Long groupId) {
-		this.groupId = groupId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	@Override
 	public int hashCode() {
@@ -61,10 +44,6 @@ public class Group implements ServiceItem {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
-	}
-
-	public static Group of(Long groupId, String name) {
-		return new Group(groupId, name);
 	}
 
 	public static Group of(Long groupId) {

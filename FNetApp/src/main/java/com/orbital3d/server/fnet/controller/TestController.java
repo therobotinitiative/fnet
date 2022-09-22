@@ -75,7 +75,6 @@ public class TestController {
 			User u = us.findUserByName(username).get();
 			Group ag = gs.findByName(groupname).get();
 			Item root = is.findRoot(ag);
-			System.out.println("uid: " + u.getUserId() + ", gid: " + ag.getGroupId());
 			for (int i = 0; i < 15; i++) {
 				Item p = is.save(Item.of(null, root.getItemId(), RandomStringUtils.randomAlphabetic(8), ItemType.FOLDER,
 						new Date(), ag.getGroupId(), u.getUserId()));

@@ -37,6 +37,10 @@ import com.orbital3d.server.fnet.service.UserService;
 import com.orbital3d.web.security.weblectricfence.annotation.RequiresPermission;
 import com.orbital3d.web.security.weblectricfence.util.HashUtil;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * Administrative controller for {@link User} related operations.
  * 
@@ -69,35 +73,11 @@ public class AdminUser {
 	 *
 	 */
 	// Getters used by framework.
-	@SuppressWarnings("unused")
+	@AllArgsConstructor(access = AccessLevel.PRIVATE, staticName = "of")
+	@Getter
 	private static final class UserDTO {
 		private String userName;
 		private Long userId;
-
-		private UserDTO(String userName, Long userId) {
-			this.userName = userName;
-			this.userId = userId;
-		}
-
-		public String getUserName() {
-			return userName;
-		}
-
-		public Long getUserId() {
-			return userId;
-		}
-
-		private void setUserName(String userName) {
-			this.userName = userName;
-		}
-
-		private void setUserId(Long userId) {
-			this.userId = userId;
-		}
-
-		static UserDTO of(String userName, Long userId) {
-			return new UserDTO(userName, userId);
-		}
 	}
 
 	/**

@@ -20,6 +20,8 @@ import com.orbital3d.server.fnet.service.ItemService;
 import com.orbital3d.server.fnet.service.SessionService;
 import com.orbital3d.web.security.weblectricfence.annotation.RequiresPermission;
 
+import lombok.Getter;
+
 /**
  * Administrative controller for {@link Group} related operations.
  * 
@@ -44,12 +46,9 @@ public class AdminGroup {
 	 * @author msiren
 	 *
 	 */
+	@Getter
 	private static class GroupDTO {
 		private String groupName;
-
-		public String getGroupName() {
-			return groupName;
-		}
 	}
 
 	/**

@@ -38,13 +38,17 @@ dependencies {
 	implementation group: 'com.mchange', name: 'c3p0', version: '0.9.5.2'
 	implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
 	implementation 'org.apache.commons:commons-collections4:4.1'
-
+	compileOnly 'org.projectlombok:lombok:1.18.24'
+	annotationProcessor 'org.projectlombok:lombok:1.18.24'
+	
 	// Weblectric Fence
 	implementation 'com.orbital3d.web.security:we-core:0.2-SNAPSHOT'
 	implementation 'com.orbital3d.web.security:we-spring-boot-starter:0.2-SNAPSHOT'
 	
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+	testCompileOnly 'org.projectlombok:lombok:1.18.24'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 
     constraints {
         implementation("org.apache.logging.log4j:log4j-core") {
