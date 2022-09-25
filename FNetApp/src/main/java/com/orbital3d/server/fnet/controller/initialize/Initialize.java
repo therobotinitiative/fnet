@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,11 +27,13 @@ import com.orbital3d.server.fnet.service.UserService;
 import com.orbital3d.web.security.weblectricfence.util.HashUtil;
 
 /**
- * Controller for initializing Fnet.
+ * Controller for initializing Fnet. Requires "enable-init" profile yo be
+ * active.
  * 
  * @author msiren
  *
  */
+@Profile("enable-init")
 @RestController
 public class Initialize {
 	@Autowired
