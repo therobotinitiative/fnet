@@ -32,7 +32,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public Iterable<Comment> getByParent(Long parentId) {
-		return commentRepository.findByItemId(parentId);
+		return commentRepository.findByItemIdOrderByTimestampDesc(parentId);
 	}
 
 }

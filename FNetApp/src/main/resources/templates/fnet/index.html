@@ -71,12 +71,7 @@
 					not working
 				</span>
 			</footer>
-			<button ng-click="errorDialog.show('Testing error', 'Nothing went wrong')">Error</button>
-			<button ng-click="information.show('Information')">Info</button>
-			<button ng-click="info()">Multiple Info</button>
-			{{current.view}}<br>
-			{{current.items}}
-			
+<button ng-click="current.event_poll()">Start event polling</button>			
 <!-- Error dialog -->
 <div class="modal-background" ng-if="errorDialog.visible == true">
 	<div class="center-dialog error-dialog" ng-click="errorDialog.hide()">

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,12 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.orbital3d.server.fnet.database.entity.Item;
 import com.orbital3d.server.fnet.database.entity.Item.ItemType;
+import com.orbital3d.server.fnet.security.FnetPermissions;
 import com.orbital3d.server.fnet.service.ItemService;
 import com.orbital3d.server.fnet.service.SessionService;
+import com.orbital3d.web.security.weblectricfence.annotation.RequiresPermission;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * Controller for {@link Item} related operations.
@@ -50,11 +54,10 @@ public class ItemController {
 	 * @author msiren
 	 *
 	 */
-	@AllArgsConstructor(access = AccessLevel.PRIVATE)
+	@NoArgsConstructor
 	@Getter
 	private static final class AddItemDTO {
 		private String itemName;
-		private ItemType itemType;
 		private Long parentId;
 	}
 
@@ -81,10 +84,20 @@ public class ItemController {
 		return itemDtos;
 	}
 
-	@PostMapping(value = "/add")
+	@PostMapping(value = "/folder")
 	@Transactional
-	protected Item addItem(@RequestBody AddItemDTO addI) {
-		return itemService.save(Item.of(addI.parentId, addI.getItemName(), addI.getItemType(),
-				sessionService.getCurrentGroup().getGroupId(), sessionService.getCurrentUser().getUserId()));
+	@RequiresPermission(FnetPermissions.Folder.CREATE)
+	protected ItemDTO addItem(@RequestBody AddItemDTO addI) {
+		return ItemDTO.of(
+				itemService.save(Item.of(addI.parentId, addI.getItemName(), ItemType.FOLDER,
+						sessionService.getCurrentGroup().getGroupId(), sessionService.getCurrentUser().getUserId())),
+				0);
+	}
+
+	@DeleteMapping("/{itemId}")
+	@Transactional
+	@RequiresPermission(FnetPermissions.Folder.DELETE)
+	protected void deleteFolder(@PathVariable Long itemId) {
+		throw new UnsupportedOperationException("folder deletion not supported yet");
 	}
 }

@@ -19,7 +19,7 @@ repositories {
 }
 
 group = 'com.orbital3d.server.fnet'
-version = '2.1.2-SNAPSHOT'
+version = '2.1.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 dependencies {

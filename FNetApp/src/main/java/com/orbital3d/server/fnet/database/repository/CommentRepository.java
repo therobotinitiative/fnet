@@ -30,5 +30,5 @@ public interface CommentRepository extends CrudRepository<Comment, Long> {
 	@Query("FROM Comment ce WHERE ce.groupId=:groupId ORDER BY ce.timestamp DESC")
 	List<Comment> findLatestLimited(@Param("groupId") Long groupId, Pageable pageable);
 
-	Iterable<Comment> findByItemId(Long parentId);
+	Iterable<Comment> findByItemIdOrderByTimestampDesc(Long parentId);
 }

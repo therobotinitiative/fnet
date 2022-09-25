@@ -41,3 +41,23 @@ div.item-title-right {
 	display: inline;
 	vertical-align: middle;
 }
+
+ul.item-sort {
+	display: inline;
+	padding-left: 0px;
+}
+
+ul.item-sort li {
+	display: inline;
+	list-disc-type: none;
+}
+
+ul.item-sort li.active {
+	display: inline;
+	list-disc-type: none;
+	background-color: var(--color-dark);
+}
+
+ul.item-sort li:hover {
+	background-color: black;
+}

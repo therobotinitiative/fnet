@@ -2,6 +2,9 @@ var app = angular.module('fnet', ['ngRoute', 'checklist-model']);
 
 const LATEST = '/fnet/latest';
 const COMMENT_ADD = '/fnet/comment/add';
+const EVENT_POLL = '/fnet/event';
+
+const LONG_POLL_TIMEOUT = 3000;
 
 /**
  * Intercept HTTP request error and use root scope error dialog.
@@ -30,10 +33,6 @@ function interceptHttpError($q, $rootScope)
 					if (error.data != null)
 					{
 						$rootScope.errorDialog.show(error.data.message, error.data.description);
-					}
-					else
-					{
-						$rootScope.errorDialog.show('Something went wrong', 'Something wrong do not know what: ' + error.status);
 					}
 			}
 			return $q.reject(error);
@@ -126,7 +125,20 @@ app.run(function($rootScope, $timeout)
 /**
  * FNet Controller
  */
-app.controller('fc', ['$scope', '$rootScope', '$http', '$routeParams', function($scope, $rootScope, $http, $routeParams) {
+app.controller('fc', ['$scope', '$rootScope', '$http', '$routeParams', '$timeout', function($scope, $rootScope, $http, $routeParams, $timeout) {
+			// Long poll:https://blog.guya.net/2016/08/08/simple-server-polling-in-angularjs-done-right/
+		  var loadTime = 1000,
+		    errorCount = 0,
+		    loadPromise;
+		  var cancelNextLoad = function() {
+		    $timeout.cancel(loadPromise);
+		  };
+		  var nextLoad = function(mill) {
+		    mill = mill || loadTime;
+		    //Always make sure the last timeout is cleared before starting a new one
+		    cancelNextLoad();
+		    loadPromise = $timeout($scope.current.event_poll, mill);
+		  };
 		$scope.current = {
 			view: session.root_view,
 			root_view: session.root_view,
@@ -139,6 +151,18 @@ app.controller('fc', ['$scope', '$rootScope', '$http', '$routeParams', function(
 			can_upload: session.can_upload,
 			can_comment: session.can_comment,
 			can_add_folder: session.can_add_folder,
+			event_poll:function() {
+				$http.get(EVENT_POLL)
+					.then(function(response) {
+						// todo: do the magic
+						console.log(response.data);
+						$scope.current.event_poll();
+						nextLoad();
+					})
+					.catch(function(res) {
+						nextLoad(++errorCount * 2 * loadTime);
+					});
+			}
 		};
 		$scope.latest_container = {
 			data: null,
@@ -155,6 +179,12 @@ app.controller('fc', ['$scope', '$rootScope', '$http', '$routeParams', function(
 		}
 		$scope.current.view = $routeParams.view;
 		$scope.latest_container.get();
+		$scope.current.event_poll();
+	  //Always clear the timeout when the view is destroyed, otherwise it will keep polling and leak memory
+	  $scope.$on('$destroy', function() {
+		console.log('stop polling');
+	    cancelNextLoad();
+	  });
 	}
 ]);
 

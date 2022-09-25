@@ -83,7 +83,7 @@ public class Index {
 				FenceUtil.getSubject().isPermitted(Permission.of(FnetPermissions.File.UPLOAD)));
 		modelAndView.addObject("cancomment",
 				FenceUtil.getSubject().isPermitted(Permission.of(FnetPermissions.Comment.CREATE)));
-		modelAndView.addObject("cancreatefoldr",
+		modelAndView.addObject("canaddfolder",
 				FenceUtil.getSubject().isPermitted(Permission.of(FnetPermissions.File.DOWNLOAD)));
 	}
 

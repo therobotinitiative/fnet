@@ -12,8 +12,24 @@
 			</h2>
 		</div>
 	</span>
+	<br>  <!-- Temporary not needed when styling -->
+	<span>
+		Sort:&nbsp;
+		<ul class="item-sort">
+			<li ng-click="item.sort('name')" class="pointer" ng-class="{ 'active' : item.sort_type == 'name' }">name</li>
+			<li ng-click="item.sort('date')" class="pointer" ng-class="{ 'active' : item.sort_type == 'date' }">date</li>
+		</ul>
+		<br>
+		<input type="checkbox" value="show date" ng-model="item.show_date">
+		<label>
+			show date
+		</label>
+	</span>
 	<ul class="item_list pointer">
 		<li ng-repeat="itemdto in item.items">
+			<span ng-if="item.show_date == true">
+				{{itemdto.item.timestamp | date: 'dd.MM.yyyy'}}
+			</span>
 			<span>
 			<i ng-switch="itemdto.item.itemType">
 				<img src="/fnet/svg/folder.svg" class="list-icon" ng-switch-when="FOLDER" />
@@ -41,7 +57,7 @@
 		</li>
 	</ul>
 	<button ng-click="upload.show()" class="pointer" ng-if="current.can_upload == true && current.view != current.root_view">Upload</button>
-	<button ng-click="current.show_add_folder()" ng-if="current.can_add_folder == true">Add Folder</button>
+	<button ng-click="folder.show()" ng-if="current.can_add_folder == true">Add Folder</button>
 </section>
 <section ng-if="item.comments.length > 0">
 	<h2>Comments:</h2>
@@ -95,6 +111,24 @@
 			<span class="pull-right">
 				<button ng-click="comment.add_comment()">Comment</button>
 				<button ng-click="comment.hide()">Cancel</button>
+			</span>
+		</span>
+	</div>
+</div>
+
+<!-- Add folder dialog -->
+<div class="modal-background" ng-if="folder.visible == true">
+	<div class="center-dialog dialog-content add-folder-dialog">
+		<h1>
+			Add folder to {{item.name}}
+		</h1>
+		<span>
+			<form id="add-folder-form">
+				<input type="text" id="add-folder">
+			</form>
+			<span class="pull-right">
+				<button ng-click="folder.add()">Add Folder</button>
+				<button ng-click="folder.hide()">Cancel</button>
 			</span>
 		</span>
 	</div>
