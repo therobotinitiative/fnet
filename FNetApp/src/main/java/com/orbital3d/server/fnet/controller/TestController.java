@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -24,6 +25,7 @@ import com.orbital3d.server.fnet.service.GroupService;
 import com.orbital3d.server.fnet.service.ItemService;
 import com.orbital3d.server.fnet.service.UserService;
 
+@Profile("enable-test-endpoints")
 @Controller
 public class TestController {
 	private static final Logger LOG = LogManager.getLogger(TestController.class);

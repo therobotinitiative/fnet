@@ -1,0 +1,16 @@
+[Unit]
+Description = FNet staging server
+After = nginx.service
+
+[Service]
+User = fnet
+Group = fnet
+Type = forking
+ExecStart = /var/lib/fnet/systemd/stage.sh start
+ExecStop = /var/lib/fnet/systemd/stage.sh stop
+PIDFile = /var/lib/fnet/pid/stage.pid
+
+Environment="PATH=/sbin:/bin:/usr/sbin:/usr/bin"
+
+[Install]
+WantedBy = multi-user.target

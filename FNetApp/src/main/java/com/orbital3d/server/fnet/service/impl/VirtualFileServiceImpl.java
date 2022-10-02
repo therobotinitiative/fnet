@@ -18,8 +18,8 @@ public class VirtualFileServiceImpl implements VirtualFileService {
 
 	@Override
 	public VFSEntity generate(String originalName, Long parentId) throws NoSuchAlgorithmException {
-		String genname = originalName + SecureRandom.getInstance("SHA1PRNG").nextInt();
-		return VFSEntity.of(parentId, Base64.getEncoder().encodeToString(genname.getBytes()), originalName);
+		String generateName = originalName + SecureRandom.getInstance("SHA1PRNG").nextInt();
+		return VFSEntity.of(parentId, Base64.getEncoder().encodeToString(generateName.getBytes()), originalName);
 	}
 
 	@Override

@@ -70,7 +70,6 @@ public class Initialize {
 	public RedirectView setPassword(@RequestBody String password) throws NoSuchAlgorithmException {
 		if (userService.findUserByName("administrator").isEmpty()) {
 			// initialize only if not present
-			Long userId = sessionService.getCurrentUser().getUserId();
 			Group adminGroup = groupService.create("administrator");
 			// do the pwd stuff
 			byte[] salt = HashUtil.generateToken();
@@ -83,7 +82,7 @@ public class Initialize {
 			permissionService.add(PermissionEntity.of(adminUser.getUserId(), "*"));
 			sessionService.setCurrentUser(adminUser);
 			sessionService.setCurrentGroup(adminGroup);
-			itemService.createRoot(adminGroup, userId);
+			itemService.createRoot(adminGroup, adminUser.getUserId());
 		}
 		return new RedirectView("/login");
 	}

@@ -102,4 +102,5 @@ bootJar {
 	exclude("**/fnet/test.html")
 	exclude("**/fnet/style.html")
 	exclude("**/sql")
+	exclude("**/resources/server")
 }

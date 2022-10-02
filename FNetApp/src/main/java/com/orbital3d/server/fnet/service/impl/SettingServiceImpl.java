@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import com.orbital3d.server.fnet.service.SettingsService;
 
 @Service
 public class SettingServiceImpl implements SettingsService {
+
+	private static final Logger LOG = LoggerFactory.getLogger(SettingServiceImpl.class);
 
 	@Value("${latest.default-limit:5}")
 	private Integer defaultLimitLatest;
@@ -37,6 +41,7 @@ public class SettingServiceImpl implements SettingsService {
 		if (!Files.isDirectory(storage)) {
 			throw new IllegalStateException("Storage is not a directory");
 		}
+		LOG.info("Storage path {} ready", storagePath);
 	}
 
 	@Override

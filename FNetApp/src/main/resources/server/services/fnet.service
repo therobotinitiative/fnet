@@ -1,0 +1,16 @@
+[Unit]
+Description = FNet production server
+After = nginx.service
+
+[Service]
+User = fnet
+Group = fnet
+Type = forking
+ExecStart = /var/lib/fnet/systemd/fnet.sh start
+ExecStop = /var/lib/fnet/systemd/fnet.sh stop
+PIDFile = /var/lib/fnet/pid/fnet.pid
+
+Environment="PATH=/sbin:/bin:/usr/sbin:/usr/bin"
+
+[Install]
+WantedBy = multi-user.target
