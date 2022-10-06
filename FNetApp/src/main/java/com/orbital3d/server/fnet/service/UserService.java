@@ -9,4 +9,8 @@ public interface UserService extends CrudService<User, UserRepository> {
 	default Optional<User> findUserByName(String userName) {
 		return getRepository().findByUserName(userName);
 	}
+
+	User createUser(String userName, String password);
+
+	User changePassword(User user, String password);
 }

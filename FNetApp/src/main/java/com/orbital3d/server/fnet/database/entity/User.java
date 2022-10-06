@@ -33,10 +33,10 @@ public class User implements ServiceItem, UserIdentity {
 	private String userName;
 
 	@NotNull
-	private byte[] password;
+	private String password;
 
 	@NotNull
-	private byte[] salt;
+	private String salt;
 
 	@Override
 	public int hashCode() {
@@ -53,7 +53,7 @@ public class User implements ServiceItem, UserIdentity {
 		return "[" + this.userId + "](" + this.userName + ")";
 	}
 
-	public static User of(String userName, byte[] password, byte[] salt) {
+	public static User of(String userName, String password, String salt) {
 		return new User(null, userName, password, salt);
 	}
 

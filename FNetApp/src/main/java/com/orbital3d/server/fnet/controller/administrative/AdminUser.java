@@ -31,11 +31,9 @@ import com.orbital3d.server.fnet.database.entity.UserData;
 import com.orbital3d.server.fnet.security.FnetPermissions;
 import com.orbital3d.server.fnet.service.GroupService;
 import com.orbital3d.server.fnet.service.MappingService;
-import com.orbital3d.server.fnet.service.PasswordService;
 import com.orbital3d.server.fnet.service.UserDataService;
 import com.orbital3d.server.fnet.service.UserService;
 import com.orbital3d.web.security.weblectricfence.annotation.RequiresPermission;
-import com.orbital3d.web.security.weblectricfence.util.HashUtil;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -59,9 +57,6 @@ public class AdminUser {
 
 	@Autowired
 	private MappingService mappingService;
-
-	@Autowired
-	private PasswordService passwordService;
 
 	@Autowired
 	private GroupService groupService;
@@ -136,9 +131,8 @@ public class AdminUser {
 	@Transactional
 	@RequiresPermission(FnetPermissions.Administrator.User.CREATE)
 	protected UserDTO addUser(@RequestBody CreateUserDTO userDto) throws NoSuchAlgorithmException {
-		User user = User.of(userDto.getUsername(), new byte[] { 0x00 }, new byte[] { 0x00 });
 		// Create user
-		user = userService.save(user);
+		User user = userService.createUser(userDto.getUsername(), "");
 		// Map to group
 		mappingService.addUser(user, groupService.getById(userDto.getGroupId()).get());
 		// Create user data
@@ -166,11 +160,7 @@ public class AdminUser {
 		}
 		Optional<User> user = userService.getById(userId);
 		if (user.isPresent()) {
-			byte[] salt = HashUtil.generateToken();
-			byte[] hashed = passwordService.hashPassword(password, salt);
-			user.get().setPassword(hashed);
-			user.get().setSalt(salt);
-			userService.save(user.get());
+			userService.save(userService.changePassword(user.get(), password));
 		}
 		Map<String, String> savedPassword = new HashMap<>();
 		savedPassword.put("password", password);
