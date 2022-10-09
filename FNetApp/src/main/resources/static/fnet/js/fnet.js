@@ -4,7 +4,7 @@ const LATEST = '/fnet/latest';
 const COMMENT_ADD = '/fnet/comment/add';
 const EVENT_POLL = '/fnet/event';
 
-const LONG_POLL_TIMEOUT = 3000;
+const LONG_POLL_TIMEOUT = 15000;
 
 /**
  * Intercept HTTP request error and use root scope error dialog.
@@ -127,9 +127,9 @@ app.run(function($rootScope, $timeout)
  */
 app.controller('fc', ['$scope', '$rootScope', '$http', '$routeParams', '$timeout', function($scope, $rootScope, $http, $routeParams, $timeout) {
 			// Long poll:https://blog.guya.net/2016/08/08/simple-server-polling-in-angularjs-done-right/
-		  var loadTime = 1000,
-		    errorCount = 0,
-		    loadPromise;
+		  var loadTime = 10000,
+		      errorCount = 0,
+		      loadPromise;
 		  var cancelNextLoad = function() {
 		    $timeout.cancel(loadPromise);
 		  };
