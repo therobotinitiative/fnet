@@ -103,14 +103,23 @@ public class Authentication {
 	 * @return Login view name
 	 */
 	@GetMapping("/logout")
-	protected String logout() {
-		String userName = "no session";
+	protected ModelAndView logout() {
+		ModelAndView modelAndView = new ModelAndView("login");
+		modelAndView.addObject("reason", "");
 		if (sessionService.isSessionActive()) {
-			userName = sessionService.getCurrentUser().getUserName();
+			User user = null;
+			try {
+				user = sessionService.getCurrentUser();
+				if (user != null) {
+					modelAndView.addObject("reason", "You have logged out");
+					FenceUtil.logout();
+					LOG.info("{} logged out", user.getUserName());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-		FenceUtil.logout();
-		LOG.info("{} logged out", userName);
-		return "/login";
+		return modelAndView;
 	}
 
 	private String createToken() throws NoSuchAlgorithmException {

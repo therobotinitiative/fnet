@@ -6,17 +6,12 @@ ul.navigation-bar {
 }
 
 li.navigation-item {
-	display: inline;
-	width: 25%;
+	display: inline-block;
+	width: 21%;
 	padding: 8px 16px;
 	margin: auto;
 }
 
 li.navigation-item:hover {
 	background-color: var(--color-dark);
-}
-
-li.navigation-item:last {
-	display: inline;
-	float: right;
 }

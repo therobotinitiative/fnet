@@ -1,3 +1,6 @@
+@import "components/button.css";
+@import "components/select.css";
+
 .pull-left {
 	float: left;
 }
@@ -15,20 +18,6 @@ div.progress-bar {
 	background-color: var(--color-light);
 }
 
-button {
-	background-color: var(--color-lighter);
-	border: none;
-	padding: 8px;
-	color: white;
-	text-align: center;
-	font-size: 12px;
-	font-weight: bold;
-}
-
-button:hover {
-	background-color: var(--color-light);
-}
-
 h2.item-list-title {
 	display: inline;
 }
@@ -42,22 +31,12 @@ div.item-title-right {
 	vertical-align: middle;
 }
 
-ul.item-sort {
-	display: inline;
-	padding-left: 0px;
+section {
+	margin-top: 4px;
+	padding-bottom: 2px;	
 }
 
-ul.item-sort li {
-	display: inline;
-	list-disc-type: none;
-}
-
-ul.item-sort li.active {
-	display: inline;
-	list-disc-type: none;
-	background-color: var(--color-dark);
-}
-
-ul.item-sort li:hover {
-	background-color: black;
+span.item-title {
+	display: block;
+	margin-bottom: 10px;
 }

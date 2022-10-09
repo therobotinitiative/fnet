@@ -132,7 +132,7 @@ public class AdminUser {
 	@RequiresPermission(FnetPermissions.Administrator.User.CREATE)
 	protected UserDTO addUser(@RequestBody CreateUserDTO userDto) throws NoSuchAlgorithmException {
 		// Create user
-		User user = userService.createUser(userDto.getUsername(), "");
+		User user = userService.createUser(userDto.getUsername(), RandomStringUtils.randomAlphabetic(16));
 		// Map to group
 		mappingService.addUser(user, groupService.getById(userDto.getGroupId()).get());
 		// Create user data

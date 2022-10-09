@@ -8,6 +8,7 @@
 @import "item.css";
 @import "comment.css";
 @import "icon.css";
+@import "sortlist.css";
 
 body {
 	background: var(--color-main);

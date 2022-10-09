@@ -25,7 +25,7 @@
 	<body>
 		<div class="center_dialog">
 		<label class="title">FNet login</label>
-		<div id="reason" class="error" th:text="${reason}">
+		<div th:if="${reason} != ''" id="reason" class="error" th:text="${reason}">
 			You should not see this
 		</div>
 		<form action="/login" method="POST">
@@ -35,7 +35,7 @@
 			<input type="text" name="username" required/><br>
 			<label>Password:</label><br>
 			<!-- remember required attribute -->
-			<input type="password" name="password" id="password">
+			<input type="password" name="password" id="password" minlength="5" required>
 			<img src="/login-spwd.png" id="toggle-icon" onclick="toggle()" class="password-toggle">
 			<br>
 			<button type="submit">Login</button>

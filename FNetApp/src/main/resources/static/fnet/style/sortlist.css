@@ -1,0 +1,31 @@
+ul.item-sort {
+	display: inline;
+	padding-left: 0px;
+}
+
+ul.item-sort li {
+	display: inline;
+	list-disc-type: none;
+	line-height: 12px;
+	padding: 6px;
+}
+
+ul.item-sort li.active {
+	display: inline;
+	list-disc-type: none;
+	background-color: var(--color-dark);
+}
+
+ul.item-sort li:hover {
+	background-color: black;
+}
+
+span.sort-menu {
+	width: 100%;
+	backkground-color: var(--color-darker);
+	margin: 6px;
+}
+
+span.sort-menu label {
+	padding: 0px;
+}

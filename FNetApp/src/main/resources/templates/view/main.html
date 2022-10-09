@@ -1,6 +1,21 @@
 <div ng-controller="itemController">
 <section>
-	<span ng-if="current.view != current.root_view">
+	<span class="sort-menu">
+		<label>
+			Sort:
+		</label>
+		<ul class="item-sort">
+			<li ng-click="item.sort('name')" class="pointer" ng-class="{ 'active' : item.sort_type == 'name' }">name</li>
+			<li ng-click="item.sort('date')" class="pointer" ng-class="{ 'active' : item.sort_type == 'date' }">date</li>
+		</ul>
+		<div>
+			<input type="checkbox" value="show date" ng-model="item.show_date">
+			<label>
+				show date
+			</label>
+		</div>
+	</span>
+	<span ng-if="current.view != current.root_view" class="item-title">
 		<div class="item-title-left">
 			<button back-button>
 				<img src="/fnet/svg/previous.svg" class="list-icon">
@@ -12,64 +27,52 @@
 			</h2>
 		</div>
 	</span>
-	<br>  <!-- Temporary not needed when styling -->
-	<span>
-		Sort:&nbsp;
-		<ul class="item-sort">
-			<li ng-click="item.sort('name')" class="pointer" ng-class="{ 'active' : item.sort_type == 'name' }">name</li>
-			<li ng-click="item.sort('date')" class="pointer" ng-class="{ 'active' : item.sort_type == 'date' }">date</li>
-		</ul>
-		<br>
-		<input type="checkbox" value="show date" ng-model="item.show_date">
-		<label>
-			show date
-		</label>
-	</span>
 	<ul class="item_list pointer">
-		<li ng-repeat="itemdto in item.items">
-			<span ng-if="item.show_date == true">
-				{{itemdto.item.timestamp | date: 'dd.MM.yyyy'}}
-			</span>
-			<span>
-			<i ng-switch="itemdto.item.itemType">
-				<img src="/fnet/svg/folder.svg" class="list-icon" ng-switch-when="FOLDER" />
-				<img src="/fnet/svg/audio.svg" class="list-icon" ng-switch-when="AUDIO" />
-				<img src="/fnet/svg/video.svg" class="list-icon" ng-switch-when="VIDEO" />
-				<img src="/fnet/svg/image.svg" class="list-icon" ng-switch-when="IMAGE" />
-				<img src="/fnet/svg/document.svg" class="list-icon" ng-switch-when="DOCUMENT" />
-				<img src="/fnet/svg/file.svg" class="list-icon" ng-switch-default />
-			</i>
-			</span>
-			<span>
-				<!-- Folder link -->
-				<a href="#!/main/{{itemdto.item.itemId}}" ng-if="itemdto.item.itemType == 'FOLDER'">
-					{{itemdto.item.name}}
-				</a>
-				<!--  download link -->
-				<a href="/fnet/download/{{itemdto.item.itemId}}" ng-if="itemdto.item.itemType != 'FOLDER'">
-					{{itemdto.item.name}}
-				</a>
-			</span>
-			<span class="pull-right" ng-if="itemdto.item.itemType == 'FOLDER'">
-				<img src="/fnet/svg/comment.svg" class="list-icon">
-				({{itemdto.commentCount}})
-			</span>
-		</li>
+		<span ng-repeat="itemdto in item.items">
+			<a href='{{itemdto.item.itemType == "FOLDER" ? "#!/main" : "/fnet/download"}}/{{itemdto.item.itemId}}'>
+				<li>
+					<span ng-if="item.show_date == true">
+						{{itemdto.item.timestamp | date: 'dd.MM.yyyy'}}
+					</span>
+					<span>
+						<i ng-switch="itemdto.item.itemType">
+							<img src="/fnet/svg/folder.svg" class="list-icon" ng-switch-when="FOLDER" />
+							<img src="/fnet/svg/audio.svg" class="list-icon" ng-switch-when="AUDIO" />
+							<img src="/fnet/svg/video.svg" class="list-icon" ng-switch-when="VIDEO" />
+							<img src="/fnet/svg/image.svg" class="list-icon" ng-switch-when="IMAGE" />
+							<img src="/fnet/svg/document.svg" class="list-icon" ng-switch-when="DOCUMENT" />
+							<img src="/fnet/svg/file.svg" class="list-icon" ng-switch-default />
+						</i>
+					</span>
+					<span>
+						<!-- Folder link -->
+						{{itemdto.item.name}}
+					</span>
+					<span class="pull-right" ng-if="itemdto.item.itemType == 'FOLDER'">
+						<img src="/fnet/svg/comment.svg" class="list-icon">
+						({{itemdto.commentCount}})
+					</span>
+				</li>
+			</a>
+		</span>
 	</ul>
 	<button ng-click="upload.show()" class="pointer" ng-if="current.can_upload == true && current.view != current.root_view">Upload</button>
 	<button ng-click="folder.show()" ng-if="current.can_add_folder == true">Add Folder</button>
 </section>
-<section ng-if="item.comments.length > 0">
-	<h2>Comments:</h2>
+
+<!-- Comments -->
+<section ng-if="current.view != current.root_view">
+	<h2 class="comment-title">Comments:</h2>
 	<button ng-click="comment.show()" class="pointer" ng-if="current.can_comment == true">Comment</button>
 	<section class="comment" ng-repeat="commentdto in item.comments">
-		<span>
-			<h4>{{commentdto.userName}}</h4> wrote on {{commentdto.timestamp | date: 'dd.MM.yyyy'}}
-		</span>
-		<span class="pull-right cursor" ng-if="commentdto.userId == current.user.userId">
-			<img src="/fnet/svg/trash.svg" class="list-icon"  ng-click="comment.delete(commentdto.commentId)">
-		</span>
-		<br>
+		<div>
+			<span>
+				<h4>{{commentdto.userName | capitalize}}</h4> wrote on {{commentdto.timestamp | date: 'dd.MM.yyyy'}}
+			</span>
+			<span class="pull-right cursor" ng-if="commentdto.userId == current.user.userId">
+				<img src="/fnet/svg/trash.svg" class="list-icon"  ng-click="comment.delete(commentdto.commentId)">
+			</span>
+		</div>
 		<p>
 			{{commentdto.comment}}
 		</p>

@@ -33,19 +33,22 @@
 			<nav>
 				<ul class="navigation-bar">
 					<li class="navigation-item">
-						<span class="name" th:text="${username}">name</span>
+						<span class="name">{{current.user_data.firstName}}</span>
 						<span th:if="${isadmin == true}">
 							<a href="/fnet#!/admin">
-								<img src="/fnet/svg/cogwheel.svg" class="list-icon">
+								<img src="/fnet/svg/admin.svg" class="list-icon">
 							</a>
 						</span>
 					</li>
 					<li class="navigation-item">
 						<!-- Grups -->
 						<span ng-if="current.user_groups.length > 1">
-							<select ng-model="current.user_groups">
+							<select>
 								<option  ng-repeat="group in current.user_groups" ng-value="group.groupId" ng-select="group.groupId == current.active_group">{{group.name}}</option>
 							</select> 
+						</span>
+						<span nh-else>
+							&nbsp;
 						</span>
 					</li>
 					<li class="navigation-item">
@@ -55,11 +58,11 @@
 						<img src="/fnet/svg/comment.svg" class="list-icon">
 						({{latest_container.data.numberOfComments}})
 					</li>
-					<li class="navigation-item pull-right">
 						<a href="/logout">
+					<li class="navigation-item">
 							<img src="/fnet/svg/exit.svg" class="list-icon">
-						</a>
 					</li>
+						</a>
 				</ul>
 			</nav>
 			<div id="main" ng-view></div>
@@ -71,7 +74,7 @@
 					not working
 				</span>
 			</footer>
-<button ng-click="current.event_poll()">Start event polling</button>			
+
 <!-- Error dialog -->
 <div class="modal-background" ng-if="errorDialog.visible == true">
 	<div class="center-dialog error-dialog" ng-click="errorDialog.hide()">

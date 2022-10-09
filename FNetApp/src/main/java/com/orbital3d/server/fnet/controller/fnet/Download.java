@@ -65,13 +65,11 @@ public class Download {
 			throws IOException {
 		Optional<Item> item = itemService.getById(itemId);
 		if (item.isPresent()) {
-			LOG.info("Downloadin {}", item);
+			LOG.debug("Downloadin {}", item);
 			if (!item.get().getItemType().equals(ItemType.FOLDER)) {
 				VFSEntity virtualFile = virtualFileService.getVrtualFile(item.get().getItemId());
 				File file = new File(setttingsService.storagePath() + virtualFile.getVirtualName());
-				LOG.info("Trying to locate: {}", file.getAbsolutePath());
 				if (file.exists()) {
-					LOG.info("File found: {}", file.getAbsolutePath());
 					// Send file
 					response.setContentType(Files.probeContentType(file.toPath()));
 					response.setHeader("Content-Disposition",

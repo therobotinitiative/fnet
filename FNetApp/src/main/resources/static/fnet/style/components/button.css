@@ -1,0 +1,13 @@
+button {
+	background-color: var(--color-lighter);
+	border: none;
+	padding: 8px;
+	color: white;
+	text-align: center;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+button:hover {
+	background-color: var(--color-light);
+}

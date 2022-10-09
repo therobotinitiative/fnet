@@ -162,6 +162,10 @@ app.controller('fc', ['$scope', '$rootScope', '$http', '$routeParams', '$timeout
 					.catch(function(res) {
 						nextLoad(++errorCount * 2 * loadTime);
 					});
+			},
+			get_link:function(item) {
+				console.log(item);
+				return "#";
 			}
 		};
 		$scope.latest_container = {
@@ -198,4 +202,15 @@ app.directive( 'backButton', function() {
             } );
         }
     };
+});
+
+/**
+ * Capitalize first letter of a string.
+ * 
+ * @returns Capitalized string
+ */
+app.filter('capitalize', function() {
+    return function(input) {
+      return (angular.isString(input) && input.length > 0) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : input;
+    }
 });
