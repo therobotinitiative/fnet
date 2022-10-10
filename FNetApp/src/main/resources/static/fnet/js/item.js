@@ -16,10 +16,10 @@ app.controller('itemController', ['$scope', '$rootScope', '$http', '$routeParams
 		show_date: false,
 		get_item:function(view_id) {
 			$scope.current.view = view_id;
-			$scope.item.name = $scope.item.get_name(view_id);
 			$http.get(ITEMS_GET + '/' + view_id).then(function(response) {
 				if (response.status == 200) {
-					$scope.item.items = response.data;
+					$scope.item.items = response.data.items;
+					$scope.item.name = response.data.name;
 				}
 			});
 			if (view_id != $scope.current.root_view) {
@@ -29,15 +29,6 @@ app.controller('itemController', ['$scope', '$rootScope', '$http', '$routeParams
 					}
 				})
 			}
-		},
-		get_name:function(view_id) {
-			if ($scope.item.items != null) {
-				var found = $scope.item.items.find(itemdto => {
-					itemdto.item.itemId == view_id;
-				});
-				return found.item.name;
-			}
-			return 'need to resolve';
 		},
 		sort:function(sort_type = '') {
 			$scope.item.sort_type = sort_type == '' ? SORT_NAME :sort_type;

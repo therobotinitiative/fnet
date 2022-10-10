@@ -49,6 +49,19 @@ public class ItemController {
 	}
 
 	/**
+	 * DTO class for transferring items and the parent name.
+	 * 
+	 * @author msiren
+	 *
+	 */
+	@AllArgsConstructor(access = AccessLevel.PUBLIC, staticName = "of")
+	@Getter
+	private static final class ItemParentDTO {
+		private String name;
+		List<ItemDTO> items;
+	}
+
+	/**
 	 * DTO class for adding item.
 	 * 
 	 * @author msiren
@@ -69,19 +82,19 @@ public class ItemController {
 
 	/**
 	 * @param parentId {@link Item}s parent id
-	 * @return {@link List} of {@link ItemDTO}s
+	 * @return {@link ItemParentDTO}
 	 */
 	@GetMapping("/{parentId}")
-	protected Iterable<ItemDTO> getItems(@PathVariable(required = false) Long parentId) {
+	protected ItemParentDTO getItems(@PathVariable(required = false) Long parentId) {
 		if (parentId == null) {
 			parentId = itemService.findRoot(sessionService.getCurrentGroup()).getItemId();
 		}
 		List<ItemDTO> itemDtos = new LinkedList<>();
-		itemService.findByParent(itemService.getById(parentId).get(), sessionService.getCurrentGroup())
-				.forEach(item -> {
-					itemDtos.add(ItemDTO.of(item, 0));
-				});
-		return itemDtos;
+		Item parent = itemService.getById(parentId).get();
+		itemService.findByParent(parent, sessionService.getCurrentGroup()).forEach(item -> {
+			itemDtos.add(ItemDTO.of(item, 0));
+		});
+		return ItemParentDTO.of(parent.getName(), itemDtos);
 	}
 
 	@PostMapping(value = "/folder")

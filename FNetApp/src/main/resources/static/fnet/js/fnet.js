@@ -163,10 +163,6 @@ app.controller('fc', ['$scope', '$rootScope', '$http', '$routeParams', '$timeout
 						nextLoad(++errorCount * 2 * loadTime);
 					});
 			},
-			get_link:function(item) {
-				console.log(item);
-				return "#";
-			}
 		};
 		$scope.latest_container = {
 			data: null,
