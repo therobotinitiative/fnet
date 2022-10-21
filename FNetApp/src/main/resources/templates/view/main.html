@@ -102,14 +102,13 @@
 
 <!-- Comment dialog -->
 <div class="modal-background" ng-if="comment.visible == true">
-	<div class="center-dialog dialog-content comment-dialog">
+	<div class="center-dialog dialog-content comment-dialog" draggable="true">
 		<h1>
 			Comment {{item.name}}
 		</h1>
 		<span>
 			<form id="comment-form">
-				<textarea id="comment" width="15" height="5">
-				</textarea>
+				<textarea id="comment" cols="20" rows="5" placeholder="Comment here" required></textarea>
 			</form>
 			<span class="pull-right">
 				<button ng-click="comment.add_comment()">Comment</button>

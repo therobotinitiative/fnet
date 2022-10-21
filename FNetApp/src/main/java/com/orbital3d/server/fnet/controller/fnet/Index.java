@@ -1,5 +1,7 @@
 package com.orbital3d.server.fnet.controller.fnet;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import com.orbital3d.server.fnet.database.entity.UserData;
 import com.orbital3d.server.fnet.security.FnetPermissions;
 import com.orbital3d.server.fnet.service.GroupService;
 import com.orbital3d.server.fnet.service.ItemService;
+import com.orbital3d.server.fnet.service.ManifestService;
 import com.orbital3d.server.fnet.service.SessionService;
 import com.orbital3d.server.fnet.service.SettingsService;
 import com.orbital3d.server.fnet.service.item.SesssionKey;
@@ -62,20 +65,23 @@ public class Index {
 	@Autowired
 	private Authorizer authorizer;
 
+	@Autowired
+	private ManifestService manifestService;
+
 	@GetMapping("/fnet")
-	protected ModelAndView index() {
+	protected ModelAndView index() throws IOException {
 		getPermissions();
 		ModelAndView modelAndViewv = new ModelAndView("fnet/index");
 		fillUserInformation(modelAndViewv);
 		return modelAndViewv;
 	}
 
-	private void fillUserInformation(ModelAndView modelAndView) {
+	private void fillUserInformation(ModelAndView modelAndView) throws IOException {
 		modelAndView.addObject("activegroup", sessionService.getCurrentGroup().getGroupId());
 		modelAndView.addObject("groups", groupService.getByUser(sessionService.getCurrentUser()));
 		modelAndView.addObject("isadmin", groupService.isUserInGroup(sessionService.getCurrentUser(),
 				groupService.findByName(settingsService.administratorGroupName()).get()));
-		modelAndView.addObject("fnetversion", "Development");
+		modelAndView.addObject("fnetversion", manifestService.getFNetVersion());
 		modelAndView.addObject("user", SafeUser.of(sessionService.getCurrentUser()));
 		modelAndView.addObject("user_data", (UserData) sessionService.get(SesssionKey.CURRENT_USER_DATA));
 		modelAndView.addObject("rootview", itemService.findRoot(sessionService.getCurrentGroup()).getItemId());

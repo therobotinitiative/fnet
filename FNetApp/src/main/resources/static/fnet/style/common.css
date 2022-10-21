@@ -1,5 +1,6 @@
 @import "components/button.css";
 @import "components/select.css";
+@import "components/input.css";
 
 .pull-left {
 	float: left;

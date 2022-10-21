@@ -104,8 +104,8 @@ public class CommentController {
 				sessionService.getCurrentUser().getUserId(), addCommentDto.getComment(), new Date());
 		comment = commentService.save(comment);
 		return CommentDTO.of(comment.getComment(), comment.getTimestamp(),
-				userService.getById(comment.getUserId()).get().getUserName(), addCommentDto.getParentId(),
-				comment.getCommentId());
+				userService.getById(comment.getUserId()).get().getUserName(),
+				sessionService.getCurrentUser().getUserId(), comment.getCommentId());
 	}
 
 	/**

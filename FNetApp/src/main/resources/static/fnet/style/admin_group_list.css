@@ -4,8 +4,12 @@ ul.admin-group-list {
 }
 
 ul.admin-group-list li {
-	padding: 8spx;
+	padding: 8px;
 	margin-bottom: 4px;
 	background-color: var(--color-darker);
+}
+
+ul.admin-group-list li:hover {
+	background-color: var(--color-light);
 }
 
