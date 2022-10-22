@@ -4,22 +4,29 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.orbital3d.server.fnet.database.entity.Comment;
+import com.orbital3d.server.fnet.database.entity.Group;
 import com.orbital3d.server.fnet.database.entity.Item;
 import com.orbital3d.server.fnet.database.entity.Item.ItemType;
 import com.orbital3d.server.fnet.service.CommentService;
+import com.orbital3d.server.fnet.service.GroupService;
 import com.orbital3d.server.fnet.service.ItemService;
 import com.orbital3d.server.fnet.service.SessionService;
 import com.orbital3d.server.fnet.service.SettingsService;
+import com.orbital3d.server.fnet.service.UserDataService;
 import com.orbital3d.server.fnet.service.item.SesssionKey;
+import com.orbital3d.web.security.weblectricfence.exception.AuthorizationException;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -62,6 +69,12 @@ public class Fnet {
 	@Autowired
 	private SettingsService setttingsService;
 
+	@Autowired
+	private GroupService groupService;
+
+	@Autowired
+	private UserDataService userDataService;
+
 	@NoArgsConstructor
 	@AllArgsConstructor(staticName = "of")
 	@Getter
@@ -74,6 +87,12 @@ public class Fnet {
 	@Getter
 	private static class dummy {
 		String message;
+	}
+
+	@AllArgsConstructor(staticName = "of")
+	@Getter
+	private static class ActiveGroupDTO {
+		private Long rootView;
 	}
 
 	/**
@@ -90,8 +109,10 @@ public class Fnet {
 		List<Item> latestItems = (List<Item>) itemService.findLatest(limit,
 				new ItemType[] { ItemType.AUDIO, ItemType.FILE, ItemType.IMAGE, ItemType.VIDEO },
 				sessionService.getCurrentGroup());
-		List<Comment> latestComments = (List<Comment>) commentService.getLatest(sessionService.getCurrentGroup(), limit);
-		return LatestDTO.of(latestItems, calculateNewItems(latestItems), latestComments, calculateNewComments(latestComments));
+		List<Comment> latestComments = (List<Comment>) commentService.getLatest(sessionService.getCurrentGroup(),
+				limit);
+		return LatestDTO.of(latestItems, calculateNewItems(latestItems), latestComments,
+				calculateNewComments(latestComments));
 	}
 
 	/**
@@ -119,6 +140,26 @@ public class Fnet {
 	@PostMapping("/event")
 	protected void receiveEvent(@RequestBody EventDTO eventDto) {
 		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * Change currently active group.
+	 * 
+	 * @param groupId New active group id
+	 * @return Group root id
+	 * @throws {@link AuthorizationException} if current user does not belong to
+	 *                selected group
+	 */
+	@PutMapping("/activegroup/{groupId}")
+	@Transactional
+	protected ActiveGroupDTO changeActiveGroup(@PathVariable Long groupId) {
+		Group group = Group.of(groupId);
+		if (groupService.isUserInGroup(sessionService.getCurrentUser(), group)) {
+			sessionService.setCurrentGroup(group);
+			userDataService.updateActiveGroup(sessionService.getCurrentUser(), groupId);
+			return ActiveGroupDTO.of(itemService.findRoot(group).getGroupId());
+		}
+		throw new AuthorizationException("Not in the selected group");
 	}
 
 	private int calculateNewItems(List<Item> itemList) {

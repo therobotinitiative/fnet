@@ -155,7 +155,6 @@ app.controller('fc', ['$scope', '$rootScope', '$http', '$routeParams', '$timeout
 				$http.get(EVENT_POLL)
 					.then(function(response) {
 						// todo: do the magic
-						console.log(response.data);
 						$scope.current.event_poll();
 						nextLoad();
 					})

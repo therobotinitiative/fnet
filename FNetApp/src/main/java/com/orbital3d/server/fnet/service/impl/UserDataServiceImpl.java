@@ -33,4 +33,10 @@ public class UserDataServiceImpl implements UserDataService {
 		}
 	}
 
+	@Override
+	@Transactional(TxType.REQUIRED)
+	public void updateActiveGroup(User user, Long groupId) {
+		userDataRepository.updateLastActiveGroup(user.getUserId(), groupId);
+	}
+
 }
