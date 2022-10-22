@@ -1,5 +1,6 @@
 package com.orbital3d.server.fnet.controller.fnet;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -18,6 +19,7 @@ import com.orbital3d.server.fnet.service.CommentService;
 import com.orbital3d.server.fnet.service.ItemService;
 import com.orbital3d.server.fnet.service.SessionService;
 import com.orbital3d.server.fnet.service.SettingsService;
+import com.orbital3d.server.fnet.service.item.SesssionKey;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,32 +41,13 @@ public class Fnet {
 	 * @author msiren
 	 *
 	 */
+	@AllArgsConstructor(staticName = "of")
 	@Getter
 	private final static class LatestDTO {
 		private List<Item> items;
 		private int numberOfItems;
 		private List<Comment> comments;
 		private int numberOfComments;
-
-		private LatestDTO(List<Item> items, List<Comment> comments) {
-			this.items = items;
-			this.numberOfItems = items.size();
-			this.comments = comments;
-			this.numberOfComments = comments.size();
-		}
-
-		/**
-		 * @param items    {@link List} of {@link Items}s
-		 * @param comments {@link List} of {@link Comment}s
-		 * @return New instance
-		 * @throws IllegalArgumentException If items or comments are null
-		 */
-		private static LatestDTO of(List<Item> items, List<Comment> comments) {
-			if (items == null || comments == null) {
-				throw new IllegalArgumentException("Parameter must not be null");
-			}
-			return new LatestDTO(items, comments);
-		}
 	}
 
 	@Autowired
@@ -104,11 +87,11 @@ public class Fnet {
 			limit = setttingsService.latestDefaultLimit();
 		}
 		// Latest comments
-		return LatestDTO.of(
-				(List<Item>) itemService.findLatest(limit,
-						new ItemType[] { ItemType.AUDIO, ItemType.FILE, ItemType.IMAGE, ItemType.VIDEO },
-						sessionService.getCurrentGroup()),
-				(List<Comment>) commentService.getLatest(sessionService.getCurrentGroup(), limit));
+		List<Item> latestItems = (List<Item>) itemService.findLatest(limit,
+				new ItemType[] { ItemType.AUDIO, ItemType.FILE, ItemType.IMAGE, ItemType.VIDEO },
+				sessionService.getCurrentGroup());
+		List<Comment> latestComments = (List<Comment>) commentService.getLatest(sessionService.getCurrentGroup(), limit);
+		return LatestDTO.of(latestItems, calculateNewItems(latestItems), latestComments, calculateNewComments(latestComments));
 	}
 
 	/**
@@ -136,5 +119,27 @@ public class Fnet {
 	@PostMapping("/event")
 	protected void receiveEvent(@RequestBody EventDTO eventDto) {
 		throw new UnsupportedOperationException();
+	}
+
+	private int calculateNewItems(List<Item> itemList) {
+		Date lastLogin = (Date) sessionService.get(SesssionKey.LAST_LOGIN_TIME);
+		int itemCount = 0;
+		for (Item item : itemList) {
+			if (item.getTimestamp().after(lastLogin)) {
+				itemCount++;
+			}
+		}
+		return itemCount;
+	}
+
+	private int calculateNewComments(List<Comment> commentList) {
+		Date lastLogin = (Date) sessionService.get(SesssionKey.LAST_LOGIN_TIME);
+		int commentCount = 0;
+		for (Comment comment : commentList) {
+			if (comment.getTimestamp().after(lastLogin)) {
+				commentCount++;
+			}
+		}
+		return commentCount;
 	}
 }
