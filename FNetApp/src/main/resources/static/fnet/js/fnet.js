@@ -164,6 +164,7 @@ app.controller('fc', ['$scope', '$rootScope', '$http', '$routeParams', '$timeout
 			},
 		};
 		$scope.latest_container = {
+			visible: false,
 			data: null,
 			get:function() {
 				$http.get(LATEST + '/5').then(function(response) {
@@ -171,6 +172,9 @@ app.controller('fc', ['$scope', '$rootScope', '$http', '$routeParams', '$timeout
 						$scope.latest_container.data = response.data;
 					}
 				})
+			},
+			toggle:function() {
+				$scope.latest_container.visible = !$scope.latest_container.visible;
 			}
 		};
 		if($routeParams.view == undefined) {
@@ -208,4 +212,15 @@ app.filter('capitalize', function() {
     return function(input) {
       return (angular.isString(input) && input.length > 0) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : input;
     }
+});
+
+/**
+ * Shorten the give string. If is longer then 50 characters it is shorten to 47 characters and '...' is added to the end.
+ *  
+ * @returns Shorten string
+ */
+app.filter('shorten', function() {
+	return function(input) {
+		return (angular.isString(input) && input.length >= 50) ? input.substring(0, 47) + '...' : input;
+	}
 });

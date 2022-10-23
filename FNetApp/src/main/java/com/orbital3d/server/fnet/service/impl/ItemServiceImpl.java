@@ -1,6 +1,7 @@
 package com.orbital3d.server.fnet.service.impl;
 
 import java.util.Date;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -50,5 +51,10 @@ public class ItemServiceImpl implements ItemService {
 			parent = itemRepository.findRoot(group.getGroupId()).get();
 		}
 		return itemRepository.findByParentIdAndGroupIdOrderByName(parent.getItemId(), group.getGroupId());
+	}
+
+	@Override
+	public Optional<Item> findById(Long itemId) {
+		return itemRepository.findById(itemId);
 	}
 }

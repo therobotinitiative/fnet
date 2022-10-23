@@ -1,5 +1,7 @@
 package com.orbital3d.server.fnet.service;
 
+import java.util.Optional;
+
 import com.orbital3d.server.fnet.database.entity.Group;
 import com.orbital3d.server.fnet.database.entity.Item;
 import com.orbital3d.server.fnet.database.entity.Item.ItemType;
@@ -14,6 +16,8 @@ public interface ItemService extends CrudService<Item, ItemRepository> {
 	Item createRoot(Group groupEntity, Long userId);
 
 	Item findRoot(Group group);
+
+	Optional<Item> findById(Long itemId);
 
 	/**
 	 * @param limit     Number of latest items

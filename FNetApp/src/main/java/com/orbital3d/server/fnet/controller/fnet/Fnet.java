@@ -3,6 +3,8 @@ package com.orbital3d.server.fnet.controller.fnet;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.transaction.Transactional;
 
@@ -25,6 +27,7 @@ import com.orbital3d.server.fnet.service.ItemService;
 import com.orbital3d.server.fnet.service.SessionService;
 import com.orbital3d.server.fnet.service.SettingsService;
 import com.orbital3d.server.fnet.service.UserDataService;
+import com.orbital3d.server.fnet.service.UserService;
 import com.orbital3d.server.fnet.service.item.SesssionKey;
 import com.orbital3d.web.security.weblectricfence.exception.AuthorizationException;
 
@@ -43,6 +46,37 @@ import lombok.NoArgsConstructor;
 //@EnableScheduling
 public class Fnet {
 	/**
+	 * DTO class for latest item.
+	 * 
+	 * @author msiren
+	 *
+	 */
+	@AllArgsConstructor(staticName = "of")
+	@Getter
+	private final static class LatestItem {
+		private String name;
+		private String parentName;
+		private Long parentId;
+		private Date timestamp;
+	}
+
+	/**
+	 * DTO class for latest comments.
+	 * 
+	 * @author msiren
+	 *
+	 */
+	@AllArgsConstructor(staticName = "of")
+	@Getter
+	private final static class LatestComment {
+		private String comment;
+		private String userName;
+		private String itemName;
+		private Long itemId;
+		private Date timestamp;
+	}
+
+	/**
 	 * DTO class for latest information.
 	 * 
 	 * @author msiren
@@ -51,9 +85,9 @@ public class Fnet {
 	@AllArgsConstructor(staticName = "of")
 	@Getter
 	private final static class LatestDTO {
-		private List<Item> items;
+		private List<LatestItem> items;
 		private int numberOfItems;
-		private List<Comment> comments;
+		private List<LatestComment> comments;
 		private int numberOfComments;
 	}
 
@@ -74,6 +108,9 @@ public class Fnet {
 
 	@Autowired
 	private UserDataService userDataService;
+
+	@Autowired
+	private UserService userService;
 
 	@NoArgsConstructor
 	@AllArgsConstructor(staticName = "of")
@@ -109,9 +146,20 @@ public class Fnet {
 		List<Item> latestItems = (List<Item>) itemService.findLatest(limit,
 				new ItemType[] { ItemType.AUDIO, ItemType.FILE, ItemType.IMAGE, ItemType.VIDEO },
 				sessionService.getCurrentGroup());
+		List<LatestItem> convertedItems = StreamSupport.stream(latestItems.spliterator(), false).map(item -> {
+			return LatestItem.of(item.getName(), itemService.findById(item.getParentId()).get().getName(),
+					item.getParentId(), item.getTimestamp());
+		}).collect(Collectors.toList());
 		List<Comment> latestComments = (List<Comment>) commentService.getLatest(sessionService.getCurrentGroup(),
 				limit);
-		return LatestDTO.of(latestItems, calculateNewItems(latestItems), latestComments,
+		List<LatestComment> convertedCommments = StreamSupport.stream(latestComments.spliterator(), false)
+				.map(comment -> {
+					return LatestComment.of(comment.getComment(),
+							userService.getById(comment.getUserId()).get().getUserName(),
+							itemService.findById(comment.getItemId()).get().getName(), comment.getItemId(),
+							comment.getTimestamp());
+				}).collect(Collectors.toList());
+		return LatestDTO.of(convertedItems, calculateNewItems(latestItems), convertedCommments,
 				calculateNewComments(latestComments));
 	}
 

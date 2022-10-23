@@ -51,7 +51,7 @@
 							&nbsp;
 						</span>
 					</li>
-					<li class="navigation-item">
+					<li class="navigation-item pointer" ng-class="{ 'active' : latest_container.visible == true }" ng-click="latest_container.toggle()">
 						<!-- Latest -->
 						<img src="/fnet/svg/file.svg" class="list-icon">
 						 ({{latest_container.data.numberOfItems}})
@@ -65,6 +65,42 @@
 						</a>
 				</ul>
 			</nav>
+			<!-- Latest -->
+			<div id="latest" ng-if="latest_container.visible == true">
+				<div class="latest-files">
+					<h3>
+						Latest Files:
+					</h3>
+					<ul>
+						<span ng-repeat="latestFile in latest_container.data.items">
+							<a href="/fnet#!main/{{latestFile.parentId}}"> 
+								<li ng-class="{ 'new-file' : latestFile.timestamp >= current.user_data.lastLogin }">
+									<soan>
+										{{latestFile.name}}
+									</soan>
+									<span class="pull-right">
+										{{latestFile.parentName}}
+									</span>
+								</li>
+							</a>
+						</span>
+					</ul>
+				</div>
+				<div class="latest-comments">
+					<h3>
+						Latest Comments:
+					</h3>
+					<ul>
+						<span ng-repeat="latestComment in latest_container.data.comments">
+							<a href="/fnet#!main/{{latestComment.itemId}}">
+								<li ng-class="( 'new-comment' : latestComment.timestamp >= current.user_data.lastLogin )">
+									{{latestComment.userName | capitalize}} wrote "{{latestComment.comment | shorten}}" in {{latestComment.itemName}}
+								</li>
+							</a>
+						</span>
+					</ul>
+				</div>
+			</div>
 			<div id="main" ng-view></div>
 			<footer>
 				<span>
@@ -74,7 +110,7 @@
 					not working
 				</span>
 			</footer>
-
+			
 <!-- Error dialog -->
 <div class="modal-background" ng-if="errorDialog.visible == true">
 	<div class="center-dialog error-dialog" ng-click="errorDialog.hide()">

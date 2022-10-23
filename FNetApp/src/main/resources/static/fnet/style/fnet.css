@@ -9,6 +9,7 @@
 @import "comment.css";
 @import "icon.css";
 @import "sortlist.css";
+@import "latest.css";
 
 body {
 	background: var(--color-main);
